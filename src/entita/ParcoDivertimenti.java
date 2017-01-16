@@ -11,11 +11,7 @@ public class ParcoDivertimenti {
 	private String tema;
 	private int nPiscine;
 	private ArrayList<String> contattiTelefonici;
-	private ArrayList<Struttura> strutture;
-	private ArrayList<Attivita> attivita;
-	private ArrayList<Dipendente> dipendenti;
-	private ArrayList<Biglietto> biglietti;
-	
+
 	
 	public ParcoDivertimenti(String nome, String sede, String tipo, int nBiglietti, String percorso, String tema,
 			int nPiscine) {
@@ -28,11 +24,7 @@ public class ParcoDivertimenti {
 		this.tema = tema;
 		this.nPiscine = nPiscine;
 		this.contattiTelefonici = new ArrayList<>();
-		this.strutture = new ArrayList<>();
-		this.attivita = new ArrayList<>();
-		this.dipendenti = new ArrayList<>();
-		this.biglietti = new ArrayList<>();
-	}
+		}
 	
 	public String getNome() {
 		return nome;
@@ -98,35 +90,4 @@ public class ParcoDivertimenti {
 		return this.contattiTelefonici;
 	}
 	
-	public void addStruttura(Struttura struttura) {
-		this.strutture.add(struttura);
-	}
-	
-	public ArrayList<Struttura> getStruttura() {
-		return this.strutture;
-	}
-	
-	public void addAttivita(Attivita attivita) {
-		this.attivita.add(attivita);
-	}
-	
-	public ArrayList<Attivita> getAttivita() {
-		return this.attivita;
-	}
-	
-	public void addDipendente(Dipendente dipendente) {
-		this.dipendenti.add(dipendente);
-	}
-	
-	public ArrayList<Dipendente> getDipendenti() {
-		return this.dipendenti;
-	}
-	
-	public void addBiglietto(Biglietto biglietto) {
-		this.biglietti.add(biglietto);
-	}
-	
-	public ArrayList<Biglietto> getBiglietti() {
-		return this.biglietti;
-	}
 }

@@ -1,6 +1,5 @@
 package entita;
 
-import java.util.ArrayList;
 
 public class Agenzia {
 
@@ -8,7 +7,6 @@ public class Agenzia {
 	private String nome;
 	private String indirizzo;
 	private String telefono;
-	private ArrayList<Pacchetto> pacchetti;
 	
 	public Agenzia(String partitaIva, String nome, String indirizzo, String telefono) {
 		super();
@@ -41,12 +39,5 @@ public class Agenzia {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
-	
-	public void addPacchetto(Pacchetto pacchetto){
-		pacchetti.add(pacchetto);
-	}
-	
-	public ArrayList<Pacchetto> getPacchetti(){
-		return this.pacchetti;
-	}
+
 }

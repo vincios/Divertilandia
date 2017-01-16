@@ -4,50 +4,58 @@ import java.sql.Date;
 
 public class Biglietto {
 	
-	private Cliente cliente;
 	private String codice;
 	private float prezzo;
 	private Date dataAcquisto;
+	private String nomeParco;
+	private String CFCliente;
 	
-	public Biglietto(Cliente cliente, String codice, float prezzo, Date dataAcquisto) {
+	public Biglietto(String codice, float prezzo, Date dataAcquisto, String nomeParco, String cFCliente) {
 		super();
-		this.cliente = cliente;
 		this.codice = codice;
 		this.prezzo = prezzo;
 		this.dataAcquisto = dataAcquisto;
+		this.nomeParco = nomeParco;
+		CFCliente = cFCliente;
 	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
+	
 	public String getCodice() {
 		return codice;
 	}
-
-	public void setCodice(String codice) {
-		this.codice = codice;
-	}
-
+	
 	public float getPrezzo() {
 		return prezzo;
 	}
-
-	public void setPrezzo(float prezzo) {
-		this.prezzo = prezzo;
-	}
-
+	
 	public Date getDataAcquisto() {
 		return dataAcquisto;
 	}
-
+	
+	public String getNomeParco() {
+		return nomeParco;
+	}
+	
+	public String getCFCliente() {
+		return CFCliente;
+	}
+	
+	public void setCodice(String codice) {
+		this.codice = codice;
+	}
+	
+	public void setPrezzo(float prezzo) {
+		this.prezzo = prezzo;
+	}
+	
 	public void setDataAcquisto(Date dataAcquisto) {
 		this.dataAcquisto = dataAcquisto;
 	}
 	
+	public void setNomeParco(String nomeParco) {
+		this.nomeParco = nomeParco;
+	}
 	
+	public void setCFCliente(String cFCliente) {
+		CFCliente = cFCliente;
+	}
 }

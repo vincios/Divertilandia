@@ -7,14 +7,14 @@ public class Cliente {
 	private String codiceFiscale;
 	private String nome;
 	private String cognome;
-	private Date data;
+	private Date dataDiNascita;
 	
 	public Cliente(String codiceFiscale, String nome, String cognome, Date data) {
 		super();
 		this.codiceFiscale = codiceFiscale;
 		this.nome = nome;
 		this.cognome = cognome;
-		this.data = data;
+		this.dataDiNascita = data;
 	}
 
 	public String getCodiceFiscale() {
@@ -42,11 +42,11 @@ public class Cliente {
 	}
 
 	public Date getData() {
-		return data;
+		return dataDiNascita;
 	}
 
 	public void setData(Date data) {
-		this.data = data;
+		this.dataDiNascita = data;
 	}
 	
 }
