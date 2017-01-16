@@ -13,6 +13,7 @@ public class ParcoDivertimenti {
 	private ArrayList<String> contattiTelefonici;
 	private ArrayList<Struttura> strutture;
 	private ArrayList<Attivita> attivita;
+	private ArrayList<Dipendente> dipendenti;
 	
 	
 	public ParcoDivertimenti(String nome, String sede, String tipo, int nBiglietti, String percorso, String tema,
@@ -28,6 +29,7 @@ public class ParcoDivertimenti {
 		this.contattiTelefonici = new ArrayList<>();
 		this.strutture = new ArrayList<>();
 		this.attivita = new ArrayList<>();
+		this.dipendenti = new ArrayList<>();
 	}
 	
 	public String getNome() {
@@ -108,5 +110,13 @@ public class ParcoDivertimenti {
 	
 	public ArrayList<Attivita> getAttivita() {
 		return this.attivita;
+	}
+	
+	public void addDipendente(Dipendente dipendente) {
+		this.dipendenti.add(dipendente);
+	}
+	
+	public ArrayList<Dipendente> getDipendenti() {
+		return this.dipendenti;
 	}
 }

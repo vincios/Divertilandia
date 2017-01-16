@@ -1,6 +1,7 @@
 package entita;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Attivita {
 
@@ -8,6 +9,7 @@ public class Attivita {
 	private String orarioApertura;
 	private String orarioChiusura;
 	private float costo;
+	private ArrayList<Dipendente> dipendenti;
 	
 	
 	public Attivita(String nome, String orarioApertura, String orarioChiusura, float costo) {
@@ -58,6 +60,13 @@ public class Attivita {
 		this.costo = costo;
 	}
 	
+	public void addDipendente(Dipendente dipendente) {
+		this.dipendenti.add(dipendente);
+	}
+	
+	public ArrayList<Dipendente> getDipendenti() {
+		return this.dipendenti;
+	}
 	
 	
 }
