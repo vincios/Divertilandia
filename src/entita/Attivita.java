@@ -22,46 +22,37 @@ public class Attivita {
 		this.offerte = new ArrayList<>();
 	}
 
-
 	public String getNome() {
 		return nome;
 	}
-
 
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-
 	public String getOrarioApertura() {
 		return orarioApertura;
 	}
-
 
 	public void setOrarioApertura(String orarioApertura) {
 		this.orarioApertura = orarioApertura;
 	}
 
-
 	public String getOrarioChiusura() {
 		return orarioChiusura;
 	}
-
 
 	public void setOrarioChiusura(String orarioChiusura) {
 		this.orarioChiusura = orarioChiusura;
 	}
 
-
 	public float getCosto() {
 		return costo;
 	}
 
-
 	public void setCosto(float costo) {
 		this.costo = costo;
 	}
-	
 	
 	public void addDipendente(Dipendente dipendente) {
 		this.dipendenti.add(dipendente);
@@ -70,6 +61,7 @@ public class Attivita {
 	public ArrayList<Dipendente> getDipendenti() {
 		return this.dipendenti;
 	}
+	
 	public void addOfferta(Offerta offerta) {
 		this.offerte.add(offerta);
 	}

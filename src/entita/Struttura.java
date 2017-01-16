@@ -26,7 +26,4 @@ public class Struttura {
 		this.nome = nome;
 	}
 	
-	
-	
-	
 }

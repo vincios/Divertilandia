@@ -70,7 +70,4 @@ public class Offerta {
 		this.percentualeSconto = percentualeSconto;
 	}
 	
-	
-	
-	
 }
