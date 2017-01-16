@@ -9,7 +9,6 @@ public class Attivita {
 	private String orarioApertura;
 	private String orarioChiusura;
 	private float costo;
-	private ArrayList<Dipendente> dipendenti;
 	
 	
 	public Attivita(String nome, String orarioApertura, String orarioChiusura, float costo) {
@@ -59,14 +58,5 @@ public class Attivita {
 	public void setCosto(float costo) {
 		this.costo = costo;
 	}
-	
-	public void addDipendente(Dipendente dipendente) {
-		this.dipendenti.add(dipendente);
-	}
-	
-	public ArrayList<Dipendente> getDipendenti() {
-		return this.dipendenti;
-	}
-	
 	
 }
