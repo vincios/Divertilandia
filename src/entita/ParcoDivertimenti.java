@@ -24,7 +24,7 @@ public class ParcoDivertimenti {
 		this.tema = tema;
 		this.nPiscine = nPiscine;
 		this.contattiTelefonici = new ArrayList<>();
-		}
+	}
 	
 	public String getNome() {
 		return nome;
@@ -88,6 +88,17 @@ public class ParcoDivertimenti {
 	
 	public ArrayList<String> getNumeriTelefonici() {
 		return this.contattiTelefonici;
+	}
+
+	@Override
+	public String toString() {
+		String str =  nome + ", " + sede + ", " + tipo + ", " + nBiglietti + ", " + percorso + ", " + tema + ", " + nPiscine;
+		
+		for(String s : contattiTelefonici) {
+			str = ", " + str + s; 
+		}
+		
+		return str;
 	}
 	
 }

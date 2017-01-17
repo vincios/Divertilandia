@@ -72,5 +72,11 @@ public class Offerta {
 	public void setNomeAttivita(String nomeAttivita) {
 		this.nomeAttivita = nomeAttivita;
 	}
-
+	
+	@Override
+	public String toString() {
+		return codice + ", " + nome + ", " + descrizione + ", " + dataInizio + ", " + dataFine + ", "
+				+ percentualeSconto + ", " + nomeParco + ", " + nomeAttivita;
+	}
+	
 }

@@ -56,6 +56,11 @@ public class Hotel {
 	public void setnCivico(String nCivico) {
 		this.nCivico = nCivico;
 	}
+
+	@Override
+	public String toString() {
+		return partitaIva + ", " + nome + ", " + città + ", " + via + ", " + nCivico;
+	}
 	
 	
 	

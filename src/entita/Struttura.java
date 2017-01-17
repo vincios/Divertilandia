@@ -28,4 +28,9 @@ public class Struttura {
 	public void setNomeParco(String nomeParco) {
 		this.nomeParco = nomeParco;
 	}
+	@Override
+	public String toString() {
+		return codice + ", " + nome + ", " + nomeParco;
+	}
+	
 }

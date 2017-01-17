@@ -46,5 +46,9 @@ public class Pacchetto {
 		this.pIvaAgenzia = pIvaAgenzia;
 	}
 	
+	@Override
+	public String toString() {
+		return codice + ", " + nome + ", " + descrizione + ", " + prezzo + ", " + pIvaAgenzia;
+	}
 	
 }
