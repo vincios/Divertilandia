@@ -1,7 +1,9 @@
 package main;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
+import entita.Offerta;
 import entita.ParcoDivertimenti;
 
 public class MainClass {
@@ -16,6 +18,13 @@ public class MainClass {
 		for(ParcoDivertimenti p : parchi) {
 			System.out.println(p.toString());
 		}
+		
+		ArrayList<Offerta> offerte = dh.getOffertePerPeriodo(Date.valueOf("2017-01-01"), Date.valueOf("2017-02-28"));
+		
+		for(Offerta o : offerte) {
+			System.out.println(o.toString());
+		}
+		
 	}
 
 }
