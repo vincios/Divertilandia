@@ -12,6 +12,7 @@ public class Offerta {
 	private int percentualeSconto;
 	private String nomeParco;
 	private String nomeAttivita;
+	
 	public Offerta(String codice, String nome, String descrizione, Date dataInizio, Date dataFine,
 			int percentualeSconto, String nomeParco, String nomeAttivita) {
 		super();

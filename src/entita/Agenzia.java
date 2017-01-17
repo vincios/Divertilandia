@@ -1,5 +1,6 @@
 package entita;
 
+import java.util.ArrayList;
 
 public class Agenzia {
 
@@ -9,6 +10,7 @@ public class Agenzia {
 	private String citta;
 	private String via;
 	private String nCivico;
+	private ArrayList<Pacchetto> pacchetti;
 	
 
 	public Agenzia(String partitaIva, String nome, String telefono, String citta, String via, String nCivico) {
@@ -19,6 +21,7 @@ public class Agenzia {
 		this.citta = citta;
 		this.via = via;
 		this.nCivico = nCivico;
+		this.pacchetti = new ArrayList<>();
 	}
 	
 	public String getPartitaIva() {
@@ -56,6 +59,14 @@ public class Agenzia {
 	}
 	public void setnCivico(String nCivico) {
 		this.nCivico = nCivico;
+	}
+	
+	public void addPacchetto(Pacchetto p) {
+		pacchetti.add(p);
+	}
+	
+	public ArrayList<Pacchetto> getPacchetti() {
+		return pacchetti;
 	}
 	
 	@Override

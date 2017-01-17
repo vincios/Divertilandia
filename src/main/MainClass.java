@@ -3,8 +3,7 @@ package main;
 import java.sql.Date;
 import java.util.ArrayList;
 
-import entita.Offerta;
-import entita.ParcoDivertimenti;
+import entita.*;
 
 public class MainClass {
 
@@ -38,6 +37,18 @@ public class MainClass {
 		
 		for(Offerta o : offerte3) {
 			System.out.println(o.toString());
+		}
+		
+		
+		System.out.println("");
+		ArrayList<Agenzia> agenzie = dh.getAgenzieConPacchettiInVendita();
+		
+		for(Agenzia a : agenzie) {
+			String s = a.getNome() + ", ";
+			
+			for (Pacchetto p : a.getPacchetti()) {
+				System.out.println(s + p.toString());
+			}
 		}
 	}
 
