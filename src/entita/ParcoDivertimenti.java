@@ -95,7 +95,7 @@ public class ParcoDivertimenti {
 		String str =  nome + ", " + sede + ", " + tipo + ", " + nBiglietti + ", " + percorso + ", " + tema + ", " + nPiscine;
 		
 		for(String s : contattiTelefonici) {
-			str = ", " + str + s; 
+			str = str + ", " + s; 
 		}
 		
 		return str;
