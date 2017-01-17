@@ -316,4 +316,80 @@ public class DbHelper {
 		}
 		return -1;
 	}
+	
+	public float getIncassoSettimanale(String nomeParco) {
+		Connection connection = null;
+		try {
+			connection = connect();
+			String query = "select sum(b.Prezzo) as incasso from biglietto b where b.NomeParco = ? and b.DataAcquisto between ? and ?";
+
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, nomeParco);
+			
+			Date d = new Date(System.currentTimeMillis());
+			d.setDate(d.getDate()-7);
+
+			statement.setDate(2, d);
+			statement.setDate(3, new Date(System.currentTimeMillis()));
+			ResultSet result = statement.executeQuery();
+
+			result.next();
+			Float incasso = result.getFloat("incasso");
+			
+			result.close();
+			statement.close();
+			
+			return incasso;
+		} catch (SQLException e) {
+			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+		} finally {
+			if(connection != null)
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+				}
+		}
+		return -1;
+	}
+	
+	public float getIncassoMensile(String nomeParco) {
+		Connection connection = null;
+		try {
+			connection = connect();
+			String query = "select sum(b.Prezzo) as incasso from biglietto b where b.NomeParco = ? and b.DataAcquisto between ? and ?";
+
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, nomeParco);
+			
+			Date d = new Date(System.currentTimeMillis());
+			d.setDate(1);
+			statement.setDate(2, d);
+			
+			Date d2 = new Date(System.currentTimeMillis());
+			d.setDate(30);
+			
+			statement.setDate(3, new Date(System.currentTimeMillis()));
+			ResultSet result = statement.executeQuery();
+
+			result.next();
+			Float incasso = result.getFloat("incasso");
+			
+			result.close();
+			statement.close();
+			
+			return incasso;
+		} catch (SQLException e) {
+			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+		} finally {
+			if(connection != null)
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+				}
+		}
+		return -1;
+	}
+	
 }
