@@ -284,4 +284,40 @@ public class DbHelper {
 			return true;
 		else return false;
 	}
+
+	/*
+	public boolean insertBiglietto(String CFCliente, String nomeParco, ArrayList<Attivita> a) {
+		Connection connection = null;
+		int result;
+		try {
+			connection = connect();
+			Biglietto biglietto = new Biglietto(Long.toString(System.currentTimeMillis()), 0, new Date(System.currentTimeMillis()), nomeParco, CFCliente);
+			String query = "insert into attivita values (?, ?, ?, ?, ?);";
+
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, a.getNome());
+			statement.setString(2, a.getNomeParco());
+			statement.setString(3, a.getOrarioApertura());
+			statement.setString(4, a.getOrarioChiusura());
+			statement.setFloat(5, a.getCosto());
+			result = statement.executeUpdate();
+			
+			statement.close();
+		} catch (SQLException e) {
+			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+			return false;
+		} finally {
+			if(connection != null)
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+				}
+		}
+		if (result == 1)
+			return true;
+		else return false;
+		
+	}
+*/
 }
