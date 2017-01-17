@@ -20,7 +20,7 @@ public class DbHelper {
 
 		url = "jdbc:mysql://localhost:3306/divertilandia?useSSL=false";
 		user = "root";
-		password = "roronoa";
+		password = "root";
 		l = Logger.getGlobal();
 	}
 
@@ -123,4 +123,45 @@ public class DbHelper {
 		return offerte;
 	}
 
+	public ArrayList<Offerta> getOffertePerAttivita(String nomeAttività, boolean orderByData) {
+		ArrayList<Offerta> offerte = new ArrayList<>();
+		Connection connection = null;
+		try {
+			connection = connect();
+			String query = null;
+			 if (orderByData) query = "select * from offerta where NomeAttivita = ? order by DataInizio";
+			 else query = "select * from offerta where NomeAttivita = ? order by Nome";
+			 
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, nomeAttività);
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				String codice = result.getString("Codice");
+				String nome = result.getString("Nome");
+				String descrizione = result.getString("Descrizione");
+				Date dataInizio = result.getDate("DataInizio");
+				Date dataFine = result.getDate("DataFine");
+				int percentualeSconto = result.getInt("PercentualeSconto");
+				String nomeParco = result.getString("NomeParco");
+				String nomeAttivita = result.getString("NomeAttivita");
+
+				Offerta offerta = new Offerta(codice, nome, descrizione, dataInizio, dataFine, percentualeSconto, nomeParco, nomeAttivita);
+
+				offerte.add(offerta);
+			}
+			result.close();
+			statement.close();
+		} catch (SQLException e) {
+			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+		} finally {
+			if(connection != null)
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+				}
+		}
+		return offerte;
+	}
 }
