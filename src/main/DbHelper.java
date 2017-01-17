@@ -285,27 +285,27 @@ public class DbHelper {
 		else return false;
 	}
 
-	/*
-	public boolean insertBiglietto(String CFCliente, String nomeParco, ArrayList<Attivita> a) {
+	public float getIncassoGiornaliero(String nomeParco) {
 		Connection connection = null;
-		int result;
 		try {
 			connection = connect();
-			Biglietto biglietto = new Biglietto(Long.toString(System.currentTimeMillis()), 0, new Date(System.currentTimeMillis()), nomeParco, CFCliente);
-			String query = "insert into attivita values (?, ?, ?, ?, ?);";
+			String query = "select sum(b.Prezzo) as incasso from biglietto b where b.NomeParco = ? and b.DataAcquisto = ?";
 
 			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setString(1, a.getNome());
-			statement.setString(2, a.getNomeParco());
-			statement.setString(3, a.getOrarioApertura());
-			statement.setString(4, a.getOrarioChiusura());
-			statement.setFloat(5, a.getCosto());
-			result = statement.executeUpdate();
+			statement.setString(1, nomeParco);
+			statement.setDate(2, new Date(System.currentTimeMillis()));
+			//statement.setDate(2, Date.valueOf("2017-01-10"));
+			ResultSet result = statement.executeQuery();
+
+			result.next();
+			Float incasso = result.getFloat("incasso");
 			
+			result.close();
 			statement.close();
+			
+			return incasso;
 		} catch (SQLException e) {
 			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
-			return false;
 		} finally {
 			if(connection != null)
 				try {
@@ -314,10 +314,6 @@ public class DbHelper {
 					l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
 				}
 		}
-		if (result == 1)
-			return true;
-		else return false;
-		
+		return -1;
 	}
-*/
 }
