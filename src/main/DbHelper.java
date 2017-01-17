@@ -219,4 +219,69 @@ public class DbHelper {
 		}
 		return agenzie;
 	}
+
+	public boolean insertAttivita(Attivita a) {
+		Connection connection = null;
+		int result;
+		try {
+			connection = connect();
+			String query = "insert into attivita values (?, ?, ?, ?, ?);";
+
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, a.getNome());
+			statement.setString(2, a.getNomeParco());
+			statement.setString(3, a.getOrarioApertura());
+			statement.setString(4, a.getOrarioChiusura());
+			statement.setFloat(5, a.getCosto());
+			result = statement.executeUpdate();
+			
+			statement.close();
+		} catch (SQLException e) {
+			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+			return false;
+		} finally {
+			if(connection != null)
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+				}
+		}
+		if (result == 1)
+			return true;
+		else return false;
+	}
+	
+	public boolean insertAgenzia(Agenzia a) {
+		Connection connection = null;
+		int result;
+		try {
+			connection = connect();
+			String query = "insert into agenzia values (?, ?, ?, ?, ?, ?);";
+
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, a.getPartitaIva());
+			statement.setString(2, a.getNome());
+			statement.setString(3, a.getCitta());
+			statement.setString(4, a.getVia());
+			statement.setString(5, a.getnCivico());
+			statement.setString(6, a.getTelefono());
+			result = statement.executeUpdate();
+			
+			statement.close();
+		} catch (SQLException e) {
+			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+			return false;
+		} finally {
+			if(connection != null)
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+				}
+		}
+		if (result == 1)
+			return true;
+		else return false;
+	}
 }

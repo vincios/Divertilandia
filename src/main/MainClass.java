@@ -50,6 +50,9 @@ public class MainClass {
 				System.out.println(s + p.toString());
 			}
 		}
+	
+	//	System.out.println("\n" + dh.insertAttivita(new Attivita("Volando sul Central Park", "13:00", "19:00", 23, "SuperHero Park")));
+	//	System.out.println("\n" + dh.insertAgenzia(new Agenzia("PRNS", "Pronostico", "0495709", "Vinciprova", "Delle Scarpette", "584")));
+		
 	}
-
 }
