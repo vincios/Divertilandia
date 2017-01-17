@@ -9,7 +9,8 @@ public class Agenzia {
 	private String citta;
 	private String via;
 	private String nCivico;
-	 
+	
+
 	public Agenzia(String partitaIva, String nome, String telefono, String citta, String via, String nCivico) {
 		super();
 		this.partitaIva = partitaIva;
@@ -57,5 +58,9 @@ public class Agenzia {
 		this.nCivico = nCivico;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return partitaIva + ", " + nome + ", " + telefono + ", " + citta
+				+ ", " + via + ", " + nCivico;
+	}
 }

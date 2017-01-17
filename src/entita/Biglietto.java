@@ -58,4 +58,11 @@ public class Biglietto {
 	public void setCFCliente(String cFCliente) {
 		CFCliente = cFCliente;
 	}
+
+	@Override
+	public String toString() {
+		return codice + ", " + prezzo + ", " + dataAcquisto + ", " + nomeParco + ", " + CFCliente;
+	}
+	
+	
 }

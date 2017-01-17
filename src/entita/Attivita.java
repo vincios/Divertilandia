@@ -56,5 +56,9 @@ public class Attivita {
 	public void setNomeParco(String nomeParco) {
 		this.nomeParco = nomeParco;
 	}
-	
+
+	@Override
+	public String toString() {
+		return nome + ", " + orarioApertura + ", " + orarioChiusura + ", " + costo + ", " + nomeParco;
+	}
 }

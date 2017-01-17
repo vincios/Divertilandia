@@ -48,5 +48,11 @@ public class Cliente {
 	public void setData(Date data) {
 		this.dataDiNascita = data;
 	}
+
+	@Override
+	public String toString() {
+		return codiceFiscale + ", " + nome + ", " + cognome + ", " + dataDiNascita;
+	}
+	
 	
 }

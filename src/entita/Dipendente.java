@@ -64,7 +64,10 @@ public class Dipendente {
 	public void setNomeParco(String nomeParco) {
 		this.nomeParco = nomeParco;
 	}
-	
-	
+	@Override
+	public String toString() {
+		return cf + ", " + nome + ", " + cognome + ", " + dataDiNascita + ", " + tipoContratto + ", " + durataContratto
+				+ ", " + nomeParco;
+	}
 	
 }
