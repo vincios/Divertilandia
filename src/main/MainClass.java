@@ -59,8 +59,17 @@ public class MainClass {
 		
 		System.out.println("");
 		System.out.println("Incasso Settimanale SuperHero Park: " + dh.getIncassoSettimanale("SuperHero Park"));
-		
+
 		System.out.println("");
 		System.out.println("Incasso Mensile SuperHero Park: " + dh.getIncassoMensile("SuperHero Park"));
+
+		Pacchetto p = new Pacchetto(Long.toString(System.currentTimeMillis()), "Pacchetto di prova", "Ciaooooo",120, "GNZS");
+		ArrayList<String> hotels = new ArrayList<>();
+		hotels.add("BTTL");
+		ArrayList<String> ristoranti = new ArrayList<>();
+		ristoranti.add("LLTM");
+		ristoranti.add("PNPR");
+		ristoranti.add("CBPR");
+		dh.insertPacchetto(p, hotels,ristoranti);
 	}
 }

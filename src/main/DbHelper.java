@@ -2,6 +2,7 @@ package main;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -129,9 +130,9 @@ public class DbHelper {
 		try {
 			connection = connect();
 			String query = null;
-			 if (orderByData) query = "select * from offerta where NomeAttivita = ? order by DataInizio";
-			 else query = "select * from offerta where NomeAttivita = ? order by Nome";
-			 
+			if (orderByData) query = "select * from offerta where NomeAttivita = ? order by DataInizio";
+			else query = "select * from offerta where NomeAttivita = ? order by Nome";
+
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, nomeAttivita);
 			ResultSet result = statement.executeQuery();
@@ -178,32 +179,32 @@ public class DbHelper {
 			String partitaIva;
 			while (result.next()) {
 				partitaIva = result.getString("PartitaIVA");
-				
+
 				if(!(agenzie.isEmpty()) && partitaIva.equals(agenzie.get(agenzie.size()-1).getPartitaIva())) {
-					
+
 					String codice = result.getString("Codice");
 					String nomePacchetto = result.getString("NomePacchetto");
 					String descrizione = result.getString("Descrizione");
 					float prezzo = result.getFloat("Prezzo");
-					
+
 					agenzie.get(agenzie.size()-1).addPacchetto(new Pacchetto(codice, nomePacchetto, descrizione, prezzo, partitaIva));
 				} else {
-				
-				String nomeAgenzia = result.getString("NomeAgenzia");
-				String citta = result.getString("Citta");
-				String via = result.getString("Via");
-				String nCivico = result.getString("NCivico");
-				String telefono = result.getString("Telefono");
-				
-				String codice = result.getString("Codice");
-				String nomePacchetto = result.getString("NomePacchetto");
-				String descrizione = result.getString("Descrizione");
-				float prezzo = result.getFloat("Prezzo");
-				
-				Agenzia agenzia = new Agenzia(partitaIva, nomeAgenzia, telefono, citta, via, nCivico);
 
-				agenzia.addPacchetto(new Pacchetto(codice, nomePacchetto, descrizione, prezzo, partitaIva));
-				agenzie.add(agenzia);
+					String nomeAgenzia = result.getString("NomeAgenzia");
+					String citta = result.getString("Citta");
+					String via = result.getString("Via");
+					String nCivico = result.getString("NCivico");
+					String telefono = result.getString("Telefono");
+
+					String codice = result.getString("Codice");
+					String nomePacchetto = result.getString("NomePacchetto");
+					String descrizione = result.getString("Descrizione");
+					float prezzo = result.getFloat("Prezzo");
+
+					Agenzia agenzia = new Agenzia(partitaIva, nomeAgenzia, telefono, citta, via, nCivico);
+
+					agenzia.addPacchetto(new Pacchetto(codice, nomePacchetto, descrizione, prezzo, partitaIva));
+					agenzie.add(agenzia);
 				}
 			}
 			result.close();
@@ -235,7 +236,7 @@ public class DbHelper {
 			statement.setString(4, a.getOrarioChiusura());
 			statement.setFloat(5, a.getCosto());
 			result = statement.executeUpdate();
-			
+
 			statement.close();
 		} catch (SQLException e) {
 			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
@@ -252,7 +253,7 @@ public class DbHelper {
 			return true;
 		else return false;
 	}
-	
+
 	public boolean insertAgenzia(Agenzia a) {
 		Connection connection = null;
 		int result;
@@ -268,7 +269,7 @@ public class DbHelper {
 			statement.setString(5, a.getnCivico());
 			statement.setString(6, a.getTelefono());
 			result = statement.executeUpdate();
-			
+
 			statement.close();
 		} catch (SQLException e) {
 			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
@@ -300,10 +301,10 @@ public class DbHelper {
 
 			result.next();
 			Float incasso = result.getFloat("incasso");
-			
+
 			result.close();
 			statement.close();
-			
+
 			return incasso;
 		} catch (SQLException e) {
 			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
@@ -340,10 +341,10 @@ public class DbHelper {
 
 			result.next();
 			Float incasso = result.getFloat("incasso");
-			
+
 			result.close();
 			statement.close();
-			
+
 			return incasso;
 		} catch (SQLException e) {
 			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
@@ -357,8 +358,7 @@ public class DbHelper {
 		}
 		return -1;
 	}
-	
-	@SuppressWarnings("deprecation")
+
 	public float getIncassoMensile(String nomeParco) {
 		Connection connection = null;
 		try {
@@ -379,10 +379,10 @@ public class DbHelper {
 
 			result.next();
 			Float incasso = result.getFloat("incasso");
-			
+
 			result.close();
 			statement.close();
-			
+
 			return incasso;
 		} catch (SQLException e) {
 			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
@@ -396,24 +396,53 @@ public class DbHelper {
 		}
 		return -1;
 	}
-	
+
 	/*Da completare*/
-	public boolean insertPacchetto(Pacchetto p, ArrayList<Hotel> h, ArrayList<Ristorante> r) {
+	public boolean insertPacchetto(Pacchetto p, ArrayList<String> hotelPIVA, ArrayList<String> ristorantePIVA) {
 		Connection connection = null;
-		int result;
+		int resultPacchetto;
+		int[] resultHotel;
+		int[] resultRistorante;
 		try {
 			connection = connect();
-			String query = "insert into pacchetto values (?, ?, ?, ?, ?);";
+			connection.setAutoCommit(false);
+			String queryPacchetti = "insert into pacchetto values (?, ?, ?, ?, ?);";
 
-			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setString(1, p.getCodice());
-			statement.setString(2, p.getNome());
-			statement.setString(3, p.getDescrizione());
-			statement.setFloat(4, p.getPrezzo());
-			statement.setString(5, p.getpIvaAgenzia());
-			result = statement.executeUpdate();
-			
-			statement.close();
+			PreparedStatement statementPacchetto = connection.prepareStatement(queryPacchetti);
+			statementPacchetto.setString(1, p.getCodice());
+			statementPacchetto.setString(2, p.getNome());
+			statementPacchetto.setString(3, p.getDescrizione());
+			statementPacchetto.setFloat(4, p.getPrezzo());
+			statementPacchetto.setString(5, p.getpIvaAgenzia());
+			resultPacchetto = statementPacchetto.executeUpdate();
+
+			String queryHotel = "insert into includereh values(?, ?);";
+			PreparedStatement statementHotel = connection.prepareStatement(queryHotel);
+
+			for(String hh: hotelPIVA) {
+				statementHotel.setString(1, p.getCodice());
+				statementHotel.setString(2, hh);
+				statementHotel.addBatch();
+			}
+
+			resultHotel = statementHotel.executeBatch();
+
+			String queryRistorante = "insert into includerer values(?, ?);";
+			PreparedStatement statementRistorante = connection.prepareStatement(queryRistorante);
+
+			for(String rr: ristorantePIVA) {
+				statementRistorante.setString(1, p.getCodice());
+				statementRistorante.setString(2, rr);
+				statementRistorante.addBatch();
+			}
+
+			resultRistorante = statementRistorante.executeBatch();
+
+			connection.commit();
+			connection.setAutoCommit(true);
+			statementPacchetto.close();
+			statementHotel.close();
+			statementRistorante.close();
 		} catch (SQLException e) {
 			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
 			return false;
@@ -425,9 +454,13 @@ public class DbHelper {
 					l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
 				}
 		}
-		if (result == 1)
+
+		System.out.println(Arrays.toString(resultHotel));
+		System.out.println(Arrays.toString(resultRistorante));
+
+		if (resultPacchetto == 1)
 			return true;
 		else return false;
 	}
-	
+
 }
