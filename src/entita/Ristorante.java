@@ -4,15 +4,15 @@ public class Ristorante {
 	
 	private String partitaIva;
 	private String nome;
-	private String città;
+	private String citta;
 	private String via;
 	private String nCivico;
 	
-	public Ristorante(String partitaIva, String nome, String città, String via, String nCivico) {
+	public Ristorante(String partitaIva, String nome, String citta, String via, String nCivico) {
 		super();
 		this.partitaIva = partitaIva;
 		this.nome = nome;
-		this.città = città;
+		this.citta = citta;
 		this.via = via;
 		this.nCivico = nCivico;
 	}
@@ -33,12 +33,12 @@ public class Ristorante {
 		this.nome = nome;
 	}
 
-	public String getCittà() {
-		return città;
+	public String getCitta() {
+		return citta;
 	}
 
-	public void setCittà(String città) {
-		this.città = città;
+	public void setCitta(String citta) {
+		this.citta = citta;
 	}
 
 	public String getVia() {
@@ -59,7 +59,7 @@ public class Ristorante {
 
 	@Override
 	public String toString() {
-		return partitaIva + ", " + nome + ", " + città + ", " + via + ", " + nCivico;
+		return partitaIva + ", " + nome + ", " + citta + ", " + via + ", " + nCivico;
 	}
 	
 	

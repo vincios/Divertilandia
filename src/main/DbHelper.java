@@ -2,6 +2,7 @@ package main;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +39,7 @@ public class DbHelper {
 		Connection connection = null;
 		try {
 			connection = connect();
-			String query = "select * from parcodivertimenti p, contattotelefonico c where p.Nome = c.NomeParco order by p.Nome";
+			String query = "SELECT * FROM parcodivertimenti p LEFT JOIN contattotelefonico c ON p.Nome = c.NomeParco ORDER BY p.Nome";
 
 			Statement statement = connection.createStatement();
 			ResultSet result = statement.executeQuery(query);
@@ -122,7 +123,7 @@ public class DbHelper {
 		return offerte;
 	}
 
-	public ArrayList<Offerta> getOffertePerAttivita(String nomeAttività, boolean orderByData) {
+	public ArrayList<Offerta> getOffertePerAttivita(String nomeAttivita, boolean orderByData) {
 		ArrayList<Offerta> offerte = new ArrayList<>();
 		Connection connection = null;
 		try {
@@ -132,7 +133,7 @@ public class DbHelper {
 			 else query = "select * from offerta where NomeAttivita = ? order by Nome";
 			 
 			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setString(1, nomeAttività);
+			statement.setString(1, nomeAttivita);
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
@@ -143,9 +144,9 @@ public class DbHelper {
 				Date dataFine = result.getDate("DataFine");
 				int percentualeSconto = result.getInt("PercentualeSconto");
 				String nomeParco = result.getString("NomeParco");
-				String nomeAttivita = result.getString("NomeAttivita");
+				String nomeAtt = result.getString("NomeAttivita");
 
-				Offerta offerta = new Offerta(codice, nome, descrizione, dataInizio, dataFine, percentualeSconto, nomeParco, nomeAttivita);
+				Offerta offerta = new Offerta(codice, nome, descrizione, dataInizio, dataFine, percentualeSconto, nomeParco, nomeAtt);
 
 				offerte.add(offerta);
 			}
@@ -185,7 +186,7 @@ public class DbHelper {
 					String descrizione = result.getString("Descrizione");
 					float prezzo = result.getFloat("Prezzo");
 					
-					agenzie.get(agenzie.size()-1).addPacchetto(new Pacchetto(codice, nomePacchetto, descrizione, prezzo, partitaIva));;
+					agenzie.get(agenzie.size()-1).addPacchetto(new Pacchetto(codice, nomePacchetto, descrizione, prezzo, partitaIva));
 				} else {
 				
 				String nomeAgenzia = result.getString("NomeAgenzia");
@@ -316,8 +317,7 @@ public class DbHelper {
 		}
 		return -1;
 	}
-	
-	@SuppressWarnings("deprecation")
+
 	public float getIncassoSettimanale(String nomeParco) {
 		Connection connection = null;
 		try {
@@ -326,9 +326,13 @@ public class DbHelper {
 
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, nomeParco);
-			
-			Date d = new Date(System.currentTimeMillis());
-			d.setDate(d.getDate()-7);
+
+
+			Calendar calendar = Calendar.getInstance();
+			calendar.setFirstDayOfWeek(Calendar.MONDAY);
+			calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+
+			Date d = new Date(calendar.getTimeInMillis());
 
 			statement.setDate(2, d);
 			statement.setDate(3, new Date(System.currentTimeMillis()));
@@ -363,15 +367,14 @@ public class DbHelper {
 
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, nomeParco);
-			
-			Date d = new Date(System.currentTimeMillis());
-			d.setDate(1);
-			statement.setDate(2, d);
-			
-			Date d2 = new Date(System.currentTimeMillis());
-			d.setDate(30);
-			
-			statement.setDate(3, new Date(System.currentTimeMillis()));
+
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.DAY_OF_MONTH, 1);
+			statement.setDate(2, new Date(calendar.getTimeInMillis()));
+
+			calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+			statement.setDate(3, new Date(calendar.getTimeInMillis()));
 			ResultSet result = statement.executeQuery();
 
 			result.next();
