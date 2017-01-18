@@ -8,7 +8,6 @@ import entita.*;
 public class MainClass {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
 		DbHelper dh = new DbHelper();
 		
@@ -83,5 +82,14 @@ public class MainClass {
 
 
 		dh.insertBiglietto(b,att);
+
+		ArrayList<Pacchetto> pacchetti = dh.getPacchettiVendutiDaAgenzia("GNZS");
+
+		for(Pacchetto pacc : pacchetti) {
+			System.out.println(pacc);
+		}
+
+		dh.vendiPacchetto("1484739324113","TNNSTR");
+
 	}
 }
