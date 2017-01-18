@@ -358,6 +358,36 @@ public class DbHelper {
 		else return false;
 	}
 
+	/*Inserisce un nuovo clente*/
+    public boolean insertCliente(Cliente c) {
+        Connection connection = null;
+        int result;
+        try {
+            connection = connect();
+            String query = "insert into Cliente values (?, ?, ?, ?);";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, c.getCodiceFiscale());
+            statement.setString(2, c.getNome());
+            statement.setString(3, c.getCognome());
+            statement.setDate(4, c.getData());
+            result = statement.executeUpdate();
+
+            statement.close();
+        } catch (SQLException e) {
+            l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+            return false;
+        } finally {
+            if(connection != null)
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+                }
+        }
+        return result == 1;
+    }
+
 	/*Restituisce L'incasso giornaliero di un parco*/
 	public float getIncassoGiornaliero(String nomeParco) {
 		Connection connection = null;
