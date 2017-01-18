@@ -59,5 +59,8 @@ public class MainClass {
 		
 		System.out.println("");
 		System.out.println("Incasso Settimanale SuperHero Park: " + dh.getIncassoSettimanale("SuperHero Park"));
+		
+		System.out.println("");
+		System.out.println("Incasso Mensile SuperHero Park: " + dh.getIncassoMensile("SuperHero Park"));
 	}
 }

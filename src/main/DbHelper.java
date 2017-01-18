@@ -317,6 +317,7 @@ public class DbHelper {
 		return -1;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public float getIncassoSettimanale(String nomeParco) {
 		Connection connection = null;
 		try {
@@ -353,6 +354,7 @@ public class DbHelper {
 		return -1;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public float getIncassoMensile(String nomeParco) {
 		Connection connection = null;
 		try {
@@ -390,6 +392,39 @@ public class DbHelper {
 				}
 		}
 		return -1;
+	}
+	
+	/*Da completare*/
+	public boolean insertPacchetto(Pacchetto p, ArrayList<Hotel> h, ArrayList<Ristorante> r) {
+		Connection connection = null;
+		int result;
+		try {
+			connection = connect();
+			String query = "insert into pacchetto values (?, ?, ?, ?, ?);";
+
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, p.getCodice());
+			statement.setString(2, p.getNome());
+			statement.setString(3, p.getDescrizione());
+			statement.setFloat(4, p.getPrezzo());
+			statement.setString(5, p.getpIvaAgenzia());
+			result = statement.executeUpdate();
+			
+			statement.close();
+		} catch (SQLException e) {
+			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+			return false;
+		} finally {
+			if(connection != null)
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+				}
+		}
+		if (result == 1)
+			return true;
+		else return false;
 	}
 	
 }
