@@ -2,7 +2,6 @@ package grafica;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.basic.BasicScrollPaneUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,6 +49,13 @@ public class GestoreFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new VisualizzaPromozioniFrame();
+            }
+        });
+
+        pacchettiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new InfoPacchettiFrame();
             }
         });
 

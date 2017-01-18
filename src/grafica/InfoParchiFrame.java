@@ -16,7 +16,7 @@ public class InfoParchiFrame extends JFrame{
         ArrayList<ParcoDivertimenti> parchi = dbh.getInfoParchiDivertimento();
 
         JPanel content = new JPanel(new BorderLayout());
-        TableData td = new TableData(parchi);
+        ParchiTableData td = new ParchiTableData(parchi);
         JTable t = new JTable(td);
         t.setRowHeight(30);
         content.add(new JScrollPane(t));
@@ -28,11 +28,11 @@ public class InfoParchiFrame extends JFrame{
     }
 }
 
-class TableData extends AbstractTableModel{
+class ParchiTableData extends AbstractTableModel{
 
     ArrayList<ParcoDivertimenti> parchi;
 
-    public TableData(ArrayList<ParcoDivertimenti> parchi) {
+    public ParchiTableData(ArrayList<ParcoDivertimenti> parchi) {
         this.parchi = parchi;
     }
 
@@ -68,10 +68,10 @@ class TableData extends AbstractTableModel{
             case 1: return "Sede";
             case 2: return "Telefono";
             case 3: return "Tipo";
-            case 5: return "Percorso";
-            case 6: return "Tema";
-            case 7: return "N. Piscine";
-            case 8: return "Biglietti Venduti";
+            case 4: return "Percorso";
+            case 5: return "Tema";
+            case 6: return "N. Piscine";
+            case 7: return "Biglietti Venduti";
             default: return "";
         }
     }
