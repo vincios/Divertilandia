@@ -1,5 +1,7 @@
 package entita;
 
+import java.util.ArrayList;
+
 public class Attivita {
 
 	private String nome;
@@ -7,6 +9,7 @@ public class Attivita {
 	private String orarioChiusura;
 	private float costo;
 	private String nomeParco;
+	private ArrayList<Offerta> offerte;
 	
 	public Attivita(String nome, String orarioApertura, String orarioChiusura, float costo, String nomeParco) {
 		super();
@@ -15,6 +18,7 @@ public class Attivita {
 		this.orarioChiusura = orarioChiusura;
 		this.costo = costo;
 		this.nomeParco = nomeParco;
+		this.offerte = new ArrayList<>();
 	}
 
 	public String getNome() {
@@ -55,6 +59,14 @@ public class Attivita {
 
 	public void setNomeParco(String nomeParco) {
 		this.nomeParco = nomeParco;
+	}
+
+	public void addOfferta(Offerta o) {
+		offerte.add(o);
+	}
+
+	public ArrayList<Offerta> getOfferte() {
+		return offerte;
 	}
 
 	@Override

@@ -1,9 +1,8 @@
 package main;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
+import java.sql.Date;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -397,7 +396,6 @@ public class DbHelper {
 		return -1;
 	}
 
-	/*Da completare*/
 	public boolean insertPacchetto(Pacchetto p, ArrayList<String> hotelPIVA, ArrayList<String> ristorantePIVA) {
 		Connection connection = null;
 		int resultPacchetto;
@@ -461,6 +459,130 @@ public class DbHelper {
 		if (resultPacchetto == 1)
 			return true;
 		else return false;
+	}
+
+	public boolean insertBiglietto(Biglietto biglietto, ArrayList<String> attivita) {
+		Connection connection = null;
+		int result;
+		try {
+			connection = connect();
+			connection.setAutoCommit(false);
+			String queryBiglietto = "insert into biglietto values (?, ?, ?, ?, ?);";
+
+			PreparedStatement statementBiglietto = connection.prepareStatement(queryBiglietto);
+			statementBiglietto.setString(1, biglietto.getCodice());
+			statementBiglietto.setFloat(2, biglietto.getPrezzo());
+			statementBiglietto.setDate(3, biglietto.getDataAcquisto());
+			statementBiglietto.setString(4, biglietto.getNomeParco());
+			statementBiglietto.setString(5, biglietto.getCFCliente());
+
+			result = statementBiglietto.executeUpdate();
+
+			String queryAttivita = "insert into comprendere values (? ,? ,?);";
+			PreparedStatement statementAttivita = connection.prepareStatement(queryAttivita);
+
+			for (String a : attivita) {
+				statementAttivita.setString(1, biglietto.getCodice());
+				statementAttivita.setString(2, a);
+				statementAttivita.setString(3, biglietto.getNomeParco());
+				statementAttivita.addBatch();
+			}
+
+			statementAttivita.executeBatch();
+
+			String queryIncrementaBiglietto = "update parcodivertimenti set NBiglietti = NBiglietti + 1 where nome = ?;";
+			PreparedStatement statementIncrementaBiglietto = connection.prepareStatement(queryIncrementaBiglietto);
+
+			statementIncrementaBiglietto.setString(1, biglietto.getNomeParco());
+
+			statementIncrementaBiglietto.executeUpdate();
+
+
+			connection.commit();
+			connection.setAutoCommit(true);
+			statementAttivita.close();
+			statementAttivita.close();
+			statementBiglietto.close();
+		} catch (SQLException e) {
+			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+			return false;
+		} finally {
+			if(connection != null)
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+				}
+		}
+		if (result == 1)
+			return true;
+		else return false;
+
+	}
+
+	public ArrayList<Attivita> getAttivitaConOfferteAttiveDiUnParco(String nomeParco, Date data) {
+		ArrayList<Attivita> attivita= new ArrayList<>();
+		Connection connection = null;
+		try {
+			connection = connect();
+
+			String query = "select a.Nome as NomeAttivita, a.Costo, a.OrarioApertura, a.OrarioChiusura, a.NomeParco, o.Codice, o.DataInizio, o.DataFine, o.Nome as NomeOfferta, o.Descrizione, o.PercentualeSconto from attivita a join offerta o on a.Nome = o.NomeAttivita AND a.NomeParco = o.NomeParco where a.NomeParco = ? AND o.DataInizio <= ? AND o.DataFine >= ? order by a.Nome";
+
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, nomeParco);
+			statement.setDate(2, data);
+			statement.setDate(3, data);
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				String nomeAttivita = result.getString("NomeAttivita");
+
+				if (!(attivita.isEmpty()) && nomeAttivita.equals(attivita.get(attivita.size() - 1).getNome())) {
+
+					String codiceOfferta = result.getString("Codice");
+					String nomeOfferta = result.getString("nomeOfferta");
+					String descrizioneOfferta = result.getString("Descrizione");
+					Date dataInizio = result.getDate("DataInizio");
+					Date dataFine = result.getDate("DataFine");
+					int percentualeSconto = result.getInt("PercentualeSconto");
+
+					Offerta off = new Offerta(codiceOfferta, nomeOfferta, descrizioneOfferta, dataInizio, dataFine, percentualeSconto, nomeParco, nomeAttivita);
+
+					attivita.get(attivita.size() - 1).addOfferta(off);
+
+				} else {
+
+					String oraApertura = result.getString("OrarioApertura");
+					String oraChiusura = result.getString("OrarioChiusura");
+					float costoattivita = result.getFloat("Costo");
+
+					String codiceOfferta = result.getString("Codice");
+					String nomeOfferta = result.getString("nomeOfferta");
+					String descrizioneOfferta = result.getString("Descrizione");
+					Date dataInizio = result.getDate("DataInizio");
+					Date dataFine = result.getDate("DataFine");
+					int percentualeSconto = result.getInt("PercentualeSconto");
+
+					Attivita att = new Attivita(nomeAttivita, oraApertura, oraChiusura, costoattivita, nomeParco);
+					Offerta off = new Offerta(codiceOfferta, nomeOfferta, descrizioneOfferta, dataInizio, dataFine, percentualeSconto, nomeParco, nomeAttivita);
+					att.addOfferta(off);
+					attivita.add(att);
+				}
+			}
+
+			result.close();
+			statement.close();
+		} catch (SQLException e) {
+			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+		} finally {
+			if(connection != null)
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+				}
+		}
+		return attivita;
 	}
 
 }

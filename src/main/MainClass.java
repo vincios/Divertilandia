@@ -71,5 +71,17 @@ public class MainClass {
 		ristoranti.add("PNPR");
 		ristoranti.add("CBPR");
 		dh.insertPacchetto(p, hotels,ristoranti);
+
+		ArrayList<Attivita> arr = dh.getAttivitaConOfferteAttiveDiUnParco("SuperHero Park", new Date(2017,4,14));
+		ArrayList<String> att = new ArrayList<>();
+
+		for(Attivita a: arr) {
+			att.add(a.getNome());
+		}
+
+		Biglietto b = new Biglietto(Long.toString(System.currentTimeMillis()),0, new Date(System.currentTimeMillis()), "SuperHero Park", "BDDSPC");
+
+
+		dh.insertBiglietto(b,att);
 	}
 }
