@@ -180,9 +180,9 @@ public class DbHelper {
         Connection connection = null;
         try {
             connection = connect();
-            String query = "select a.PartitaIVA, a.Nome as NomeAgenzia, a.citta, a.via, a.NCivico, a.Telefono, p.Codice, p.nome as NomePacchetto, p.Descrizione , p.Prezzo " +
-                    "from pacchetto p , agenzia a " +
-                    "where a.PartitaIVA = p.PivaAgenzia and Codice not in (" +
+            String query = "select a.PartitaIVA as PartitaIVAAgenzia, a.Nome as NomeAgenzia, a.citta as cittaAgenzia, a.via as viaAgenzia, a.NCivico as NCivicoAgenzia, a.Telefono, p.Codice, p.nome as NomePacchetto, p.Descrizione , p.Prezzo, s.PartitaIVA as PartitaIVAServizio, s.Nome as NomeServizio, s.Citta as CittaServizio, s.via as viaServizio, s.NCivico as NCivicoServizio, s.tipo " +
+                    "from pacchetto p , agenzia a , includere i, servizio s " +
+                    "where a.PartitaIVA = p.PivaAgenzia and i.CodicePacchetto = p.Codice and s.PartitaIVA = i.PivaServizio and Codice not in (" +
                     "select pa.Codice " +
                     "from pacchetto pa, acquistare ac " +
                     "where ac.CodicePacchetto = pa.Codice) " +
@@ -192,10 +192,32 @@ public class DbHelper {
             ResultSet result = statement.executeQuery(query);
 
             String partitaIva;
+            String codicePacchetto;
             while (result.next()) {
-                partitaIva = result.getString("PartitaIVA");
+                partitaIva = result.getString("PartitaIVAAgenzia");
+                codicePacchetto = result.getString("Codice");
 
-                if(!(agenzie.isEmpty()) && partitaIva.equals(agenzie.get(agenzie.size()-1).getPartitaIva())) {
+                if(!(agenzie.isEmpty()) && partitaIva.equals(agenzie.get(agenzie.size()-1).getPartitaIva()) && codicePacchetto.equals(agenzie.get(agenzie.size()-1).getPacchetti().get(agenzie.get(agenzie.size()-1).getPacchetti().size() -1).getCodice())) {
+
+                    String partitaIVAServizio = result.getString("partitaIVAServizio");
+                    String nomeServizio = result.getString("nomeServizio");
+                    String cittaServizio = result.getString("cittaServizio");
+                    String viaServizio = result.getString("viaServizio");
+                    String nCivicoServizio = result.getString("nCivicoServizio");
+                    String tipoServizio = result.getString("Tipo");
+
+                    Servizio s = new Servizio(partitaIVAServizio, nomeServizio, cittaServizio, viaServizio, nCivicoServizio, tipoServizio);
+
+                    agenzie.get(agenzie.size()-1).getPacchetti().get(agenzie.get(agenzie.size()-1).getPacchetti().size() -1).addServizio(s);
+                }
+                else if (!(agenzie.isEmpty()) && partitaIva.equals(agenzie.get(agenzie.size()-1).getPartitaIva())){
+
+                    String partitaIVAServizio = result.getString("partitaIVAServizio");
+                    String nomeServizio = result.getString("nomeServizio");
+                    String cittaServizio = result.getString("cittaServizio");
+                    String viaServizio = result.getString("viaServizio");
+                    String nCivicoServizio = result.getString("nCivicoServizio");
+                    String tipoServizio = result.getString("Tipo");
 
                     String codice = result.getString("Codice");
                     String nomePacchetto = result.getString("NomePacchetto");
@@ -203,22 +225,34 @@ public class DbHelper {
                     float prezzo = result.getFloat("Prezzo");
 
                     agenzie.get(agenzie.size()-1).addPacchetto(new Pacchetto(codice, nomePacchetto, descrizione, prezzo, partitaIva));
+
+
+                    Servizio s = new Servizio(partitaIVAServizio, nomeServizio, cittaServizio, viaServizio, nCivicoServizio, tipoServizio);
+
+                    agenzie.get(agenzie.size()-1).getPacchetti().get(agenzie.get(agenzie.size()-1).getPacchetti().size() -1).addServizio(s);
                 } else {
 
                     String nomeAgenzia = result.getString("NomeAgenzia");
-                    String citta = result.getString("Citta");
-                    String via = result.getString("Via");
-                    String nCivico = result.getString("NCivico");
-                    String telefono = result.getString("Telefono");
+                    String cittaAgenzia = result.getString("CittaAgenzia");
+                    String viaAgenzia = result.getString("ViaAgenzia");
+                    String nCivicoAgenzia = result.getString("NCivicoAgenzia");
+                    String telefonoAgenzia = result.getString("Telefono");
 
-                    String codice = result.getString("Codice");
                     String nomePacchetto = result.getString("NomePacchetto");
-                    String descrizione = result.getString("Descrizione");
-                    float prezzo = result.getFloat("Prezzo");
+                    String descrizionePacchetto = result.getString("Descrizione");
+                    float prezzoPacchetto = result.getFloat("Prezzo");
 
-                    Agenzia agenzia = new Agenzia(partitaIva, nomeAgenzia, telefono, citta, via, nCivico);
+                    String partitaIVAServizio = result.getString("partitaIVAServizio");
+                    String nomeServizio = result.getString("nomeServizio");
+                    String cittaServizio = result.getString("cittaServizio");
+                    String viaServizio = result.getString("viaServizio");
+                    String nCivicoServizio = result.getString("nCivicoServizio");
+                    String tipoServizio = result.getString("Tipo");
 
-                    agenzia.addPacchetto(new Pacchetto(codice, nomePacchetto, descrizione, prezzo, partitaIva));
+                    Agenzia agenzia = new Agenzia(partitaIva, nomeAgenzia, telefonoAgenzia, cittaAgenzia, viaAgenzia, nCivicoAgenzia);
+                    Pacchetto pacchetto = new Pacchetto(codicePacchetto, nomePacchetto, descrizionePacchetto, prezzoPacchetto, partitaIva);
+                    pacchetto.addServizio(new Servizio(partitaIVAServizio, nomeServizio, cittaServizio, viaServizio, nCivicoServizio, tipoServizio));
+                    agenzia.addPacchetto(pacchetto);
                     agenzie.add(agenzia);
                 }
             }
@@ -504,7 +538,7 @@ public class DbHelper {
                 statementServizio.addBatch();
             }
 
-           statementServizio.executeBatch();
+            statementServizio.executeBatch();
 
             connection.commit();
             connection.setAutoCommit(true);
@@ -717,7 +751,5 @@ public class DbHelper {
         }
         return result == 1;
     }
-
-
 
 }

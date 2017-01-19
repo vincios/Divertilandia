@@ -71,7 +71,7 @@ public class Servizio {
 
 	@Override
 	public String toString() {
-		return partitaIva + ", " + nome + ", " + citta + ", " + via + ", " + nCivico;
+		return partitaIva + ", " + nome + ", " + citta + ", " + via + ", " + nCivico + ", " + tipo;
 	}
 	
 	
