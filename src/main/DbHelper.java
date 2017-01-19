@@ -186,7 +186,7 @@ public class DbHelper {
                     "select pa.Codice " +
                     "from pacchetto pa, acquistare ac " +
                     "where ac.CodicePacchetto = pa.Codice) " +
-                    "order by a.PartitaIVA;";
+                    "order by a.PartitaIVA, p.Codice, s.nome;";
 
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(query);

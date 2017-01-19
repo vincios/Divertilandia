@@ -42,7 +42,7 @@ public class MainClass {
 		}
 
 
-		System.out.println("");
+		System.out.println("\n\nGetAgenzie con pacchetti in vendita\n\n");
 		ArrayList<Agenzia> agenzie = dh.getAgenzieConPacchettiInVendita();
 
 		for(Agenzia a : agenzie) {
