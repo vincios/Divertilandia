@@ -65,13 +65,12 @@ public class MainClass {
 
 		System.out.println("");
 		Pacchetto p = new Pacchetto(Long.toString(System.currentTimeMillis()), "Pacchetto di prova", "Ciaooooo",120, "GNZS");
-		ArrayList<String> hotels = new ArrayList<>();
-		hotels.add("BTTL");
-		ArrayList<String> ristoranti = new ArrayList<>();
-		ristoranti.add("LLTM");
-		ristoranti.add("PNPR");
-		ristoranti.add("CBPR");
-		dh.insertPacchetto(p, hotels,ristoranti);
+		ArrayList<String> servizi = new ArrayList<>();
+		servizi.add("BTTL");
+		servizi.add("LLTM");
+		servizi.add("PNPR");
+		servizi.add("CBPR");
+		dh.insertPacchetto(p, servizi);
 
 
 		System.out.println("");
