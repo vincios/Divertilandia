@@ -2,6 +2,7 @@ package main;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import entita.*;
 
@@ -62,6 +63,7 @@ public class MainClass {
 		System.out.println("");
 		System.out.println("Incasso Mensile SuperHero Park: " + dh.getIncassoMensile("SuperHero Park"));
 
+		System.out.println("");
 		Pacchetto p = new Pacchetto(Long.toString(System.currentTimeMillis()), "Pacchetto di prova", "Ciaooooo",120, "GNZS");
 		ArrayList<String> hotels = new ArrayList<>();
 		hotels.add("BTTL");
@@ -71,14 +73,24 @@ public class MainClass {
 		ristoranti.add("CBPR");
 		dh.insertPacchetto(p, hotels,ristoranti);
 
-		ArrayList<Attivita> arr = dh.getAttivitaConOfferteAttiveDiUnParco("SuperHero Park", new Date(2017,4,14));
+
+		System.out.println("");
+		ArrayList<Attivita> arr = dh.getAttivitaConOfferteAttiveDiUnParco("SuperHero Park", Date.valueOf("2017-01-25"));
 		ArrayList<String> att = new ArrayList<>();
 
+		float prezzoBiglietto = 0;
 		for(Attivita a: arr) {
+			System.out.println(a);
+			for(Offerta o : a.getOfferte()) {
+				System.out.println("\t" + o);
+			}
+			prezzoBiglietto = prezzoBiglietto + a.getPrezzoScontato();
+			System.out.println();
 			att.add(a.getNome());
 		}
 
-		Biglietto b = new Biglietto(Long.toString(System.currentTimeMillis()),0, new Date(System.currentTimeMillis()), "SuperHero Park", "BDDSPC");
+		System.out.println("\n");
+		Biglietto b = new Biglietto(Long.toString(System.currentTimeMillis()), prezzoBiglietto, new Date(System.currentTimeMillis()), "SuperHero Park", "BDDSPC");
 
 
 		dh.insertBiglietto(b,att);
@@ -89,7 +101,7 @@ public class MainClass {
 			System.out.println(pacc);
 		}
 
-		dh.vendiPacchetto("1484739324113","TNNSTR");
+		//dh.vendiPacchetto("1484739324113","TNNSTR");
 
 	}
 }

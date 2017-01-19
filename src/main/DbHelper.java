@@ -170,30 +170,32 @@ public class DbHelper {
 
 	/*Restituisce le attività con le offerte attive in una determinata data*/
 	public ArrayList<Attivita> getAttivitaConOfferteAttiveDiUnParco(String nomeParco, Date data) {
-		ArrayList<Attivita> attivita= new ArrayList<>();
+
+        ArrayList<Attivita> attivita= new ArrayList<>();
 		Connection connection = null;
 		try {
 			connection = connect();
 
-			String query = "select a.Nome as NomeAttivita, a.Costo, a.OrarioApertura, a.OrarioChiusura, a.NomeParco, o.Codice, o.DataInizio, o.DataFine, o.Nome as NomeOfferta, o.Descrizione, o.PercentualeSconto from attivita a join offerta o on a.Nome = o.NomeAttivita AND a.NomeParco = o.NomeParco where a.NomeParco = ? AND o.DataInizio <= ? AND o.DataFine >= ? order by a.Nome";
+			String queryAttvitaConOfferte = "select a.Nome as NomeAttivita, a.Costo, a.OrarioApertura, a.OrarioChiusura, a.NomeParco, o.Codice, o.DataInizio, o.DataFine, o.Nome as NomeOfferta, o.Descrizione, o.PercentualeSconto from attivita a left join offerta o on a.Nome = o.NomeAttivita AND a.NomeParco = o.NomeParco where a.NomeParco = ? AND o.DataInizio <= ? AND o.DataFine >= ? order by a.Nome";
 
-			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setString(1, nomeParco);
-			statement.setDate(2, data);
-			statement.setDate(3, data);
-			ResultSet result = statement.executeQuery();
+			PreparedStatement statementAttivitaConOfferte = connection.prepareStatement(queryAttvitaConOfferte);
+			statementAttivitaConOfferte.setString(1, nomeParco);
+			statementAttivitaConOfferte.setDate(2, data);
+			statementAttivitaConOfferte.setDate(3, data);
+			ResultSet resultAttivitaConOfferta = statementAttivitaConOfferte.executeQuery();
 
-			while (result.next()) {
-				String nomeAttivita = result.getString("NomeAttivita");
+			while (resultAttivitaConOfferta.next()) {
 
-				if (!(attivita.isEmpty()) && nomeAttivita.equals(attivita.get(attivita.size() - 1).getNome())) {
+				String nomeAttivita = resultAttivitaConOfferta.getString("NomeAttivita");
 
-					String codiceOfferta = result.getString("Codice");
-					String nomeOfferta = result.getString("nomeOfferta");
-					String descrizioneOfferta = result.getString("Descrizione");
-					Date dataInizio = result.getDate("DataInizio");
-					Date dataFine = result.getDate("DataFine");
-					int percentualeSconto = result.getInt("PercentualeSconto");
+				if (!attivita.isEmpty() && nomeAttivita.equals(attivita.get(attivita.size() - 1).getNome())) {
+
+                    String codiceOfferta = resultAttivitaConOfferta.getString("Codice");
+					String nomeOfferta = resultAttivitaConOfferta.getString("nomeOfferta");
+					String descrizioneOfferta = resultAttivitaConOfferta.getString("Descrizione");
+					Date dataInizio = resultAttivitaConOfferta.getDate("DataInizio");
+					Date dataFine = resultAttivitaConOfferta.getDate("DataFine");
+					int percentualeSconto = resultAttivitaConOfferta.getInt("PercentualeSconto");
 
 					Offerta off = new Offerta(codiceOfferta, nomeOfferta, descrizioneOfferta, dataInizio, dataFine, percentualeSconto, nomeParco, nomeAttivita);
 
@@ -201,16 +203,16 @@ public class DbHelper {
 
 				} else {
 
-					String oraApertura = result.getString("OrarioApertura");
-					String oraChiusura = result.getString("OrarioChiusura");
-					float costoattivita = result.getFloat("Costo");
+					String oraApertura = resultAttivitaConOfferta.getString("OrarioApertura");
+					String oraChiusura = resultAttivitaConOfferta.getString("OrarioChiusura");
+					float costoattivita = resultAttivitaConOfferta.getFloat("Costo");
 
-					String codiceOfferta = result.getString("Codice");
-					String nomeOfferta = result.getString("nomeOfferta");
-					String descrizioneOfferta = result.getString("Descrizione");
-					Date dataInizio = result.getDate("DataInizio");
-					Date dataFine = result.getDate("DataFine");
-					int percentualeSconto = result.getInt("PercentualeSconto");
+					String codiceOfferta = resultAttivitaConOfferta.getString("Codice");
+					String nomeOfferta = resultAttivitaConOfferta.getString("nomeOfferta");
+					String descrizioneOfferta = resultAttivitaConOfferta.getString("Descrizione");
+					Date dataInizio = resultAttivitaConOfferta.getDate("DataInizio");
+					Date dataFine = resultAttivitaConOfferta.getDate("DataFine");
+					int percentualeSconto = resultAttivitaConOfferta.getInt("PercentualeSconto");
 
 					Attivita att = new Attivita(nomeAttivita, oraApertura, oraChiusura, costoattivita, nomeParco);
 					Offerta off = new Offerta(codiceOfferta, nomeOfferta, descrizioneOfferta, dataInizio, dataFine, percentualeSconto, nomeParco, nomeAttivita);
@@ -219,8 +221,35 @@ public class DbHelper {
 				}
 			}
 
-			result.close();
-			statement.close();
+			resultAttivitaConOfferta.close();
+			statementAttivitaConOfferte.close();
+
+			String queryAttivitaSenzaOfferte =
+					"SELECT * " +
+					"FROM attivita " +
+					"WHERE NomeParco = ? AND nome NOT IN ( SELECT a.Nome " +
+					"FROM attivita a LEFT JOIN offerta o ON a.Nome = o.NomeAttivita AND a.NomeParco = o.NomeParco " +
+					"WHERE a.NomeParco = ? AND o.DataInizio <= ? AND o.DataFine >= ?)";
+
+			PreparedStatement statementAttivitaSenzaOfferta = connection.prepareStatement(queryAttivitaSenzaOfferte);
+			statementAttivitaSenzaOfferta.setString(1, nomeParco);
+			statementAttivitaSenzaOfferta.setString(2, nomeParco);
+			statementAttivitaSenzaOfferta.setDate(3, data);
+			statementAttivitaSenzaOfferta.setDate(4, data);
+			ResultSet resultAttivitaSenzaOfferta = statementAttivitaSenzaOfferta.executeQuery();
+
+			while (resultAttivitaSenzaOfferta.next()) {
+				String nomeAttivita = resultAttivitaSenzaOfferta.getString("Nome");
+				String oraApertura = resultAttivitaSenzaOfferta.getString("OrarioApertura");
+				String oraChiusura = resultAttivitaSenzaOfferta.getString("OrarioChiusura");
+				float costoattivita = resultAttivitaSenzaOfferta.getFloat("Costo");
+
+				attivita.add(new Attivita(nomeAttivita, oraApertura, oraChiusura, costoattivita, nomeParco));
+			}
+
+            resultAttivitaSenzaOfferta.close();
+            statementAttivitaSenzaOfferta.close();
+
 		} catch (SQLException e) {
 			l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
 		} finally {

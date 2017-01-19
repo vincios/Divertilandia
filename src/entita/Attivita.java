@@ -1,5 +1,6 @@
 package entita;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class Attivita {
@@ -35,6 +36,20 @@ public class Attivita {
 
 	public float getCosto() {
 		return costo;
+	}
+
+	public float getPrezzoScontato() {
+		if(offerte.isEmpty())
+			return costo;
+
+		float prezzoScontato = costo;
+		for(Offerta o : offerte) {
+			prezzoScontato = prezzoScontato - (prezzoScontato / 100 * o.getPercentualeSconto());
+		}
+
+		BigDecimal bd = new BigDecimal(Float.toString(prezzoScontato));
+		bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+		return bd.floatValue();
 	}
 
 	public String getNomeParco() {
