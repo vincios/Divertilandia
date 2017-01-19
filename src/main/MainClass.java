@@ -110,6 +110,12 @@ public class MainClass {
 
 		//dh.vendiPacchetto("1484739324113","TNNSTR");
 
+		ArrayList<Cliente> ac = dh.getClienti();
+
+		for(Cliente c : ac) {
+			System.out.println(c);
+		}
+
 	}
 
 	private static void inserisciTantiPacchetti () {

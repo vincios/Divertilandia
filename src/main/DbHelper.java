@@ -752,4 +752,41 @@ public class DbHelper {
         return result == 1;
     }
 
+    public ArrayList<Cliente> getClienti() {
+        ArrayList<Cliente> clienti = new ArrayList<>();
+        Connection connection = null;
+        try {
+            connection = connect();
+            String query =  "select * " +
+                    "from cliente " +
+                    "order by Cognome";
+
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                String nome = result.getString("Nome");
+                String cognome = result.getString("Cognome");
+                String cF = result.getString("CF");
+                Date dDN = result.getDate("DataDiNascita");
+
+                Cliente cliente = new Cliente(cF, nome, cognome, dDN);
+                clienti.add(cliente);
+            }
+
+            result.close();
+            statement.close();
+        } catch (SQLException e) {
+            l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+        } finally {
+            if(connection != null)
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+                }
+        }
+        return clienti;
+    }
+
 }
