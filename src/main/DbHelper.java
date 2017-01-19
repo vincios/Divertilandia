@@ -40,9 +40,9 @@ public class DbHelper {
         Connection connection = null;
         try {
             connection = connect();
-            String query =  "SELECT * " +
-                    "FROM parcodivertimenti p LEFT JOIN contattotelefonico c ON p.Nome = c.NomeParco " +
-                    "ORDER BY p.Nome";
+            String query =  "select * " +
+                    "from parcodivertimenti p left join contattotelefonico c on p.Nome = c.NomeParco " +
+                    "order by p.Nome";
 
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(query);
@@ -191,13 +191,24 @@ public class DbHelper {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(query);
 
+            boolean firstTime = true;
             String partitaIva;
             String codicePacchetto;
+
             while (result.next()) {
                 partitaIva = result.getString("PartitaIVAAgenzia");
                 codicePacchetto = result.getString("Codice");
 
-                if(!(agenzie.isEmpty()) && partitaIva.equals(agenzie.get(agenzie.size()-1).getPartitaIva()) && codicePacchetto.equals(agenzie.get(agenzie.size()-1).getPacchetti().get(agenzie.get(agenzie.size()-1).getPacchetti().size() -1).getCodice())) {
+                String partitaIvaPrecedente = null;
+                String codicePacchettoPrecedente = null;
+
+                if(!firstTime) {
+                    partitaIvaPrecedente = agenzie.get(agenzie.size()-1).getPartitaIva();
+                    codicePacchettoPrecedente = agenzie.get(agenzie.size()-1).getPacchetti().get(agenzie.get(agenzie.size()-1).getPacchetti().size() -1).getCodice();
+                }
+                firstTime = false;
+
+                if(!(agenzie.isEmpty()) && partitaIva.equals(partitaIvaPrecedente) && codicePacchetto.equals(codicePacchettoPrecedente)) {
 
                     String partitaIVAServizio = result.getString("partitaIVAServizio");
                     String nomeServizio = result.getString("nomeServizio");
@@ -210,7 +221,7 @@ public class DbHelper {
 
                     agenzie.get(agenzie.size()-1).getPacchetti().get(agenzie.get(agenzie.size()-1).getPacchetti().size() -1).addServizio(s);
                 }
-                else if (!(agenzie.isEmpty()) && partitaIva.equals(agenzie.get(agenzie.size()-1).getPartitaIva())){
+                else if (!(agenzie.isEmpty()) && partitaIva.equals(partitaIvaPrecedente)) {
 
                     String partitaIVAServizio = result.getString("partitaIVAServizio");
                     String nomeServizio = result.getString("nomeServizio");
@@ -226,10 +237,10 @@ public class DbHelper {
 
                     agenzie.get(agenzie.size()-1).addPacchetto(new Pacchetto(codice, nomePacchetto, descrizione, prezzo, partitaIva));
 
-
                     Servizio s = new Servizio(partitaIVAServizio, nomeServizio, cittaServizio, viaServizio, nCivicoServizio, tipoServizio);
 
                     agenzie.get(agenzie.size()-1).getPacchetti().get(agenzie.get(agenzie.size()-1).getPacchetti().size() -1).addServizio(s);
+
                 } else {
 
                     String nomeAgenzia = result.getString("NomeAgenzia");
@@ -299,9 +310,7 @@ public class DbHelper {
                     l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
                 }
         }
-        if (result == 1)
-            return true;
-        else return false;
+        return (result == 1);
     }
 
     /* 6 Inserisce una nuova agenzia*/
@@ -333,9 +342,7 @@ public class DbHelper {
                     l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
                 }
         }
-        if (result == 1)
-            return true;
-        else return false;
+        return (result == 1);
     }
 
     /* 7 Inserisce un nuovo biglietto*/
@@ -591,9 +598,9 @@ public class DbHelper {
         Connection connection = null;
         try {
             connection = connect();
-            String query = "SELECT p.Codice, p.Nome, p.Prezzo, p.Descrizione " +
-                    "FROM pacchetto p, agenzia a, acquistare aq " +
-                    "WHERE p.PivaAgenzia = a.PartitaIVA AND  a.PartitaIVA = ? AND p.Codice = aq.CodicePacchetto";
+            String query = "select p.Codice, p.Nome, p.Prezzo, p.Descrizione " +
+                    "from pacchetto p, agenzia a, acquistare aq " +
+                    "where p.PivaAgenzia = a.PartitaIVA and  a.PartitaIVA = ? and p.Codice = aq.CodicePacchetto";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, PIVAAgenzia);
