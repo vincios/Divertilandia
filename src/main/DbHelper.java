@@ -53,7 +53,9 @@ public class DbHelper {
 
                 if(!(parchi.isEmpty()) && nome.equals(parchi.get(parchi.size()-1).getNome())) {
                     String telefono = result.getString("Telefono");
+
                     parchi.get(parchi.size()-1).addNumeroTelefonico(telefono);
+
                 } else {
 
                     String sede = result.getString("Sede");
@@ -65,10 +67,13 @@ public class DbHelper {
                     String telefono = result.getString("Telefono");
 
                     ParcoDivertimenti parco = new ParcoDivertimenti (nome, sede, tipo, nBiglietti, percorso, tema, nPiscine);
-                    parco.addNumeroTelefonico(telefono);
+
+                    if(telefono != null)
+                        parco.addNumeroTelefonico(telefono);
 
                     parchi.add(parco);
                 }
+
             }
             result.close();
             statement.close();

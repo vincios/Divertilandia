@@ -8,8 +8,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -23,6 +22,12 @@ public class AggiungiAttivitaFrame extends JFrame{
 
 
     public AggiungiAttivitaFrame() throws HeadlessException {
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                System.out.println(e.getComponent().getWidth() +"x"+e.getComponent().getHeight());
+            }
+        });
         JPanel content = new JPanel(new BorderLayout());
         content.setBorder(new EmptyBorder(5,5,5,5));
         dbh = new DbHelper();
@@ -59,7 +64,7 @@ public class AggiungiAttivitaFrame extends JFrame{
 
         content.add(b, BorderLayout.SOUTH);
         setContentPane(content);
-        setSize(600,200);
+        setSize(685,130);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
         setVisible(true);
@@ -111,8 +116,8 @@ public class AggiungiAttivitaFrame extends JFrame{
         oraChiusuraTextField = new JFormattedTextField();
         costoTextField = new JTextField();
 
-        oraAperturaTextField.setColumns(3);
-        oraChiusuraTextField.setColumns(3);
+        oraAperturaTextField.setColumns(4);
+        oraChiusuraTextField.setColumns(4);
         nomeAttivitaTextField.setColumns(30);
         costoTextField.setColumns(7);
 
@@ -138,4 +143,6 @@ public class AggiungiAttivitaFrame extends JFrame{
 
         return panel;
     }
+
+
 }

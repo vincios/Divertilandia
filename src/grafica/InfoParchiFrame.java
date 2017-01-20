@@ -122,7 +122,7 @@ class AttivitaParcoFrame extends JFrame {
 
         setContentPane(content);
         setSize(800,300);
-        setResizable(false);
+        setResizable(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setVisible(true);

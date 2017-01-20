@@ -23,7 +23,7 @@ public class Main {
                 e1.printStackTrace();
             }
         }
-        new HomeFrame();
-       //new VisualizzaIncassoFrame();
+       new HomeFrame();
+       //new AggiungiBigliettoFrame();
     }
 }
