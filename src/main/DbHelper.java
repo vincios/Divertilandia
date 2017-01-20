@@ -784,7 +784,7 @@ public class DbHelper {
         Connection connection = null;
         try {
             connection = connect();
-            String query =  "select * from attivita where NomeParco = ? order by a.Nome;";
+            String query =  "select * from attivita where NomeParco = ? order by Nome;";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, nomeParco);
