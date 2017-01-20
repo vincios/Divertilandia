@@ -73,7 +73,11 @@ public class Servizio {
 	public String toString() {
 		return partitaIva + ", " + nome + ", " + citta + ", " + via + ", " + nCivico + ", " + tipo;
 	}
-	
-	
-	
+
+
+	public String getInfo(){
+		return tipo.substring(0,1).toUpperCase() + tipo.substring(1) + ": " +
+				nome + ", " + via + ", " + nCivico + ", " + citta;
+
+	}
 }

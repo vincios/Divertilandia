@@ -68,7 +68,7 @@ public class Agenzia {
 	public ArrayList<Pacchetto> getPacchetti() {
 		return pacchetti;
 	}
-	
+
 	@Override
 	public String toString() {
 		return partitaIva + ", " + nome + ", " + telefono + ", " + citta

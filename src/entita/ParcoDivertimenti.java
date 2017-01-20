@@ -90,6 +90,14 @@ public class ParcoDivertimenti {
 		return this.contattiTelefonici;
 	}
 
+	public String numeriTelefoniciToString(){
+		String r = contattiTelefonici.get(0);
+		for(int i = 1; i<contattiTelefonici.size(); i++)
+			r += ", " + contattiTelefonici.get(i);
+
+		return r;
+	}
+
 	@Override
 	public String toString() {
 		String str =  nome + ", " + sede + ", " + tipo + ", " + nBiglietti + ", " + percorso + ", " + tema + ", " + nPiscine;
