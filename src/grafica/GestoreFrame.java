@@ -21,8 +21,8 @@ public class GestoreFrame extends JFrame {
 
         JButton parchiButton = new JButton("Visualizza Parchi");
         JButton promozioniButton = new JButton("Visualizza Promozioni");
-        JButton pacchettiButton = new JButton("Visualizza Pacchetti");
-        JButton attivitaButton = new JButton("Inserisci attività");
+        JButton pacchettiButton = new JButton("Visualizza Pacchetti in vendita");
+        JButton attivitaButton = new JButton("Inserisci attivita");
         JButton agenziaButton = new JButton("Inserisci agenzia");
         JButton bigliettiButton = new JButton("Vendi biglietto");
         JButton incassoButton = new JButton("Visualizza Incasso");
@@ -56,6 +56,27 @@ public class GestoreFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new InfoPacchettiFrame();
+            }
+        });
+
+        attivitaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AggiungiAttivitaFrame();
+            }
+        });
+
+        agenziaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AggiungiAgenziaFrame();
+            }
+        });
+
+        incassoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new VisualizzaIncassoFrame();
             }
         });
 

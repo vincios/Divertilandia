@@ -3,9 +3,11 @@ package grafica;
 
 import entita.Agenzia;
 import entita.Pacchetto;
+import entita.Servizio;
 import main.DbHelper;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -22,6 +24,7 @@ public class InfoPacchettiFrame extends JFrame {
         Map<String, Agenzia> agenzie = new HashMap<>();
         ArrayList<Pacchetto> pacchetti = new ArrayList<>();
 
+
         for(Agenzia a : fromDB){
             for(Pacchetto p : a.getPacchetti()) {
                 pacchetti.add(p);
@@ -37,24 +40,32 @@ public class InfoPacchettiFrame extends JFrame {
         content.add(new JScrollPane(t), BorderLayout.CENTER);
 
         JPanel southPanel = new JPanel(new BorderLayout());
-
+        southPanel.setBorder(new EmptyBorder(10,10,5,10));
         JLabel titolo = new JLabel("Il pacchetto comprende:");
 
         southPanel.add(titolo, BorderLayout.NORTH);
-        JTextPane textPane = new JTextPane();
+        DefaultListModel<String> dm = new DefaultListModel<>();
+        JList<String> jList = new JList<>(dm);
+        jList.setFont(jList.getFont().deriveFont(6));
+        dm.addElement("");
+        dm.addElement("");
+        dm.addElement("");
 
         t.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                textPane.setText(t.getModel().getValueAt(t.getSelectedRow(), 0).toString());
+                dm.removeAllElements();
+                for (Servizio s : pacchetti.get(t.getSelectedRow()).getServizi()) {
+                    dm.addElement(s.getInfo());
+                }
             }
         });
 
-        southPanel.add(textPane, BorderLayout.CENTER);
+        southPanel.add(jList, BorderLayout.CENTER);
         content.add(southPanel, BorderLayout.SOUTH);
         setContentPane(content);
 
-        setSize(1200,300);
+        setSize(1200,450);
         setVisible(true);
     }
 }

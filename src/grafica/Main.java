@@ -9,6 +9,7 @@ public class Main {
         UIDefaults defaults = UIManager.getLookAndFeelDefaults();
         if (defaults.get("Table.alternateRowColor") == null)
             defaults.put("Table.alternateRowColor", new Color(145, 187, 213, 50));
-        new HomeFrame();
+       new HomeFrame();
+       //new VisualizzaIncassoFrame();
     }
 }
