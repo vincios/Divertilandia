@@ -193,7 +193,7 @@ public class VisualizzaPromozioniFrame extends JFrame{
 
     private JTable createTable(){
         tm = new OfferteTableData();
-        JTable t = new JTable(tm);
+        JTable t = new CenterAlignTable(tm);
         t.setRowHeight(20);
         return t;
     }

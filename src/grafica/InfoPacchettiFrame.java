@@ -35,7 +35,7 @@ public class InfoPacchettiFrame extends JFrame {
         JPanel content = new JPanel(new BorderLayout());
         PacchettiTableData td = new PacchettiTableData(pacchetti, agenzie);
 
-        JTable t = new JTable(td);
+        JTable t = new CenterAlignTable(td);
         t.setRowHeight(30);
         content.add(new JScrollPane(t), BorderLayout.CENTER);
 

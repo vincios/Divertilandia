@@ -15,7 +15,7 @@ public class GestoreFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel content = new JPanel(new BorderLayout());
-        content.setBorder(new EmptyBorder(10,10,10,10));
+        content.setBorder(new EmptyBorder(10,5,10,5));
         setContentPane(content);
 
 
@@ -27,7 +27,7 @@ public class GestoreFrame extends JFrame {
         JButton bigliettiButton = new JButton("Vendi biglietto");
         JButton incassoButton = new JButton("Visualizza Incasso");
 
-        JPanel buttonPanel = new JPanel(new GridLayout(7,1,10,10));
+        JPanel buttonPanel = new JPanel(new GridLayout(7,1,2,2));
         buttonPanel.add(parchiButton);
         buttonPanel.add(promozioniButton);
         buttonPanel.add(pacchettiButton);

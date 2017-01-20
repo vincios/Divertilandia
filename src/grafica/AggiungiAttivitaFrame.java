@@ -80,9 +80,7 @@ public class AggiungiAttivitaFrame extends JFrame{
                      ParcoDivertimenti p = (ParcoDivertimenti) value;
                      setText(p.getNome() + ", " + p.getSede() + ", " + p.getTipo().substring(0,1).toUpperCase()+p.getTipo().substring(1));
 
-                     setFont(getFont().deriveFont(6));
 
-                     setBackground(new Color(255, 204, 217, 70));
                  }
 
                  return c;

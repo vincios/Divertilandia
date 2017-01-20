@@ -91,10 +91,14 @@ public class ParcoDivertimenti {
 	}
 
 	public String numeriTelefoniciToString(){
-		String r = contattiTelefonici.get(0);
-		for(int i = 1; i<contattiTelefonici.size(); i++)
-			r += ", " + contattiTelefonici.get(i);
-
+		String r = "nd";
+			String tmp = contattiTelefonici.get(0);
+			if(tmp != null) {
+				r = tmp;
+				for (int i = 1; i < contattiTelefonici.size(); i++)
+					r += ", " + contattiTelefonici.get(i);
+			}
+		
 		return r;
 	}
 

@@ -1,15 +1,29 @@
 package grafica;
 
+import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
 
 public class Main {
 
     public static void main(String[] par){
-        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-        if (defaults.get("Table.alternateRowColor") == null)
-            defaults.put("Table.alternateRowColor", new Color(145, 187, 213, 50));
-       new HomeFrame();
+
+        try {
+            UIManager.setLookAndFeel(new WindowsLookAndFeel());
+
+        } catch (Exception e) {
+            // If Nimbus is not available, you can set the GUI to another look and feel.
+
+            try {
+                UIManager.setLookAndFeel(new NimbusLookAndFeel());
+            } catch (UnsupportedLookAndFeelException e1) {
+                e1.printStackTrace();
+            }
+        }
+        new HomeFrame();
        //new VisualizzaIncassoFrame();
     }
 }

@@ -6,8 +6,6 @@ import entita.ParcoDivertimenti;
 import main.DbHelper;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -25,7 +23,7 @@ public class InfoParchiFrame extends JFrame{
 
         JPanel content = new JPanel(new BorderLayout());
         ParchiTableData td = new ParchiTableData(parchi);
-        JTable t = new JTable(td);
+        JTable t = new CenterAlignTable(td);
         t.setRowHeight(30);
 
         attivitaParcoFrame = null;
@@ -49,7 +47,6 @@ public class InfoParchiFrame extends JFrame{
         });
         content.add(new JScrollPane(t));
 
-        //content.add(creaEastPanel(), BorderLayout.SOUTH);
         setContentPane(content);
 
         setSize(1300,500);
@@ -115,7 +112,7 @@ class AttivitaParcoFrame extends JFrame {
         JPanel content = new JPanel(new BorderLayout());
         AttivitaTableModel tm = new AttivitaTableModel(attivita);
 
-        JTable t = new JTable(tm);
+        JTable t = new CenterAlignTable(tm);
 
         t.setRowHeight(25);
 
