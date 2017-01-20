@@ -319,9 +319,11 @@ public class DbHelper {
     }
 
     /* 7 Inserisce un nuovo biglietto*/
-    public void insertBiglietto(Biglietto biglietto, ArrayList<String> attivita) {
+    public boolean insertBiglietto(Biglietto biglietto, ArrayList<String> attivita) {
         Connection connection = null;
-        int result;
+        int resultBiglietto = 0;
+        int[] resultAttivita = new int[0];
+        int resultParco = 0;
         try {
             connection = connect();
             connection.setAutoCommit(false);
@@ -334,7 +336,7 @@ public class DbHelper {
             statementBiglietto.setString(4, biglietto.getNomeParco());
             statementBiglietto.setString(5, biglietto.getCFCliente());
 
-            result = statementBiglietto.executeUpdate();
+            resultBiglietto = statementBiglietto.executeUpdate();
 
             String queryAttivita = "insert into comprendere values (? ,? ,?);";
             PreparedStatement statementAttivita = connection.prepareStatement(queryAttivita);
@@ -346,14 +348,14 @@ public class DbHelper {
                 statementAttivita.addBatch();
             }
 
-            statementAttivita.executeBatch();
+            resultAttivita = statementAttivita.executeBatch();
 
             String queryIncrementaBiglietto = "update parcodivertimenti set NBiglietti = NBiglietti + 1 where nome = ?;";
             PreparedStatement statementIncrementaBiglietto = connection.prepareStatement(queryIncrementaBiglietto);
 
             statementIncrementaBiglietto.setString(1, biglietto.getNomeParco());
 
-            statementIncrementaBiglietto.executeUpdate();
+            resultParco = statementIncrementaBiglietto.executeUpdate();
 
 
             connection.commit();
@@ -371,6 +373,12 @@ public class DbHelper {
                     l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
                 }
         }
+
+        int somma = 0;
+        for (int i = 0; i == resultAttivita.length; i++) {
+            somma = somma + resultAttivita[i];
+        }
+        return resultBiglietto == 1 && resultParco == 1 && somma == resultAttivita.length;
     }
 
     /* 8G Restituisce L'incasso giornaliero di un parco*/
