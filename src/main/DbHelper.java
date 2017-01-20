@@ -191,77 +191,50 @@ public class DbHelper {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(query);
 
-            boolean firstTime = true;
-            String partitaIva;
-            String codicePacchetto;
-
             while (result.next()) {
-                partitaIva = result.getString("PartitaIVAAgenzia");
-                codicePacchetto = result.getString("Codice");
+                String partitaIvaAgenzia = result.getString("PartitaIVAAgenzia");
+                String nomeAgenzia = result.getString("NomeAgenzia");
+                String cittaAgenzia = result.getString("CittaAgenzia");
+                String viaAgenzia = result.getString("ViaAgenzia");
+                String nCivicoAgenzia = result.getString("NCivicoAgenzia");
+                String telefonoAgenzia = result.getString("Telefono");
+
+                String codicePacchetto = result.getString("Codice");
+                String nomePacchetto = result.getString("NomePacchetto");
+                String descrizionePacchetto = result.getString("Descrizione");
+                float prezzoPacchetto = result.getFloat("Prezzo");
+
+                String partitaIVAServizio = result.getString("partitaIVAServizio");
+                String nomeServizio = result.getString("nomeServizio");
+                String cittaServizio = result.getString("cittaServizio");
+                String viaServizio = result.getString("viaServizio");
+                String nCivicoServizio = result.getString("nCivicoServizio");
+                String tipoServizio = result.getString("Tipo");
+
 
                 String partitaIvaPrecedente = null;
                 String codicePacchettoPrecedente = null;
 
-                if(!firstTime) {
+                if(!agenzie.isEmpty()) {
                     partitaIvaPrecedente = agenzie.get(agenzie.size()-1).getPartitaIva();
                     codicePacchettoPrecedente = agenzie.get(agenzie.size()-1).getPacchetti().get(agenzie.get(agenzie.size()-1).getPacchetti().size() -1).getCodice();
                 }
-                firstTime = false;
 
-                if(!(agenzie.isEmpty()) && partitaIva.equals(partitaIvaPrecedente) && codicePacchetto.equals(codicePacchettoPrecedente)) {
-
-                    String partitaIVAServizio = result.getString("partitaIVAServizio");
-                    String nomeServizio = result.getString("nomeServizio");
-                    String cittaServizio = result.getString("cittaServizio");
-                    String viaServizio = result.getString("viaServizio");
-                    String nCivicoServizio = result.getString("nCivicoServizio");
-                    String tipoServizio = result.getString("Tipo");
+                if(!(agenzie.isEmpty()) && partitaIvaAgenzia.equals(partitaIvaPrecedente) && codicePacchetto.equals(codicePacchettoPrecedente)) {
 
                     Servizio s = new Servizio(partitaIVAServizio, nomeServizio, cittaServizio, viaServizio, nCivicoServizio, tipoServizio);
-
                     agenzie.get(agenzie.size()-1).getPacchetti().get(agenzie.get(agenzie.size()-1).getPacchetti().size() -1).addServizio(s);
                 }
-                else if (!(agenzie.isEmpty()) && partitaIva.equals(partitaIvaPrecedente)) {
+                else if (!(agenzie.isEmpty()) && partitaIvaAgenzia.equals(partitaIvaPrecedente)) {
 
-                    String partitaIVAServizio = result.getString("partitaIVAServizio");
-                    String nomeServizio = result.getString("nomeServizio");
-                    String cittaServizio = result.getString("cittaServizio");
-                    String viaServizio = result.getString("viaServizio");
-                    String nCivicoServizio = result.getString("nCivicoServizio");
-                    String tipoServizio = result.getString("Tipo");
-
-                    String codice = result.getString("Codice");
-                    String nomePacchetto = result.getString("NomePacchetto");
-                    String descrizione = result.getString("Descrizione");
-                    float prezzo = result.getFloat("Prezzo");
-
-                    agenzie.get(agenzie.size()-1).addPacchetto(new Pacchetto(codice, nomePacchetto, descrizione, prezzo, partitaIva));
-
+                    agenzie.get(agenzie.size()-1).addPacchetto(new Pacchetto(codicePacchetto, nomePacchetto, descrizionePacchetto, prezzoPacchetto, partitaIvaAgenzia));
                     Servizio s = new Servizio(partitaIVAServizio, nomeServizio, cittaServizio, viaServizio, nCivicoServizio, tipoServizio);
-
                     agenzie.get(agenzie.size()-1).getPacchetti().get(agenzie.get(agenzie.size()-1).getPacchetti().size() -1).addServizio(s);
 
                 } else {
 
-                    String nomeAgenzia = result.getString("NomeAgenzia");
-                    String cittaAgenzia = result.getString("CittaAgenzia");
-                    String viaAgenzia = result.getString("ViaAgenzia");
-                    String nCivicoAgenzia = result.getString("NCivicoAgenzia");
-                    String telefonoAgenzia = result.getString("Telefono");
-
-                    String nomePacchetto = result.getString("NomePacchetto");
-                    String descrizionePacchetto = result.getString("Descrizione");
-                    float prezzoPacchetto = result.getFloat("Prezzo");
-
-                    String partitaIVAServizio = result.getString("partitaIVAServizio");
-                    String nomeServizio = result.getString("nomeServizio");
-                    String cittaServizio = result.getString("cittaServizio");
-                    String viaServizio = result.getString("viaServizio");
-                    String nCivicoServizio = result.getString("nCivicoServizio");
-                    String tipoServizio = result.getString("Tipo");
-
-                    Agenzia agenzia = new Agenzia(partitaIva, nomeAgenzia, telefonoAgenzia, cittaAgenzia, viaAgenzia, nCivicoAgenzia);
-                    Pacchetto pacchetto = new Pacchetto(codicePacchetto, nomePacchetto, descrizionePacchetto, prezzoPacchetto, partitaIva);
+                    Agenzia agenzia = new Agenzia(partitaIvaAgenzia, nomeAgenzia, telefonoAgenzia, cittaAgenzia, viaAgenzia, nCivicoAgenzia);
+                    Pacchetto pacchetto = new Pacchetto(codicePacchetto, nomePacchetto, descrizionePacchetto, prezzoPacchetto, partitaIvaAgenzia);
                     pacchetto.addServizio(new Servizio(partitaIVAServizio, nomeServizio, cittaServizio, viaServizio, nCivicoServizio, tipoServizio));
                     agenzia.addPacchetto(pacchetto);
                     agenzie.add(agenzia);
@@ -759,6 +732,7 @@ public class DbHelper {
         return result == 1;
     }
 
+    /*Restituisce un'ArrayList di clienti*/
     public ArrayList<Cliente> getClienti() {
         ArrayList<Cliente> clienti = new ArrayList<>();
         Connection connection = null;
@@ -794,6 +768,44 @@ public class DbHelper {
                 }
         }
         return clienti;
+    }
+
+    /*Restituisce un'ArrayList di Attivita*/
+    public ArrayList<Attivita> getAttivitaParco(String nomeParco) {
+        ArrayList<Attivita> attivita = new ArrayList<>();
+        Connection connection = null;
+        try {
+            connection = connect();
+            String query =  "select * from attivita where NomeParco = ? order by a.Nome;";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, nomeParco);
+            ResultSet result = statement.executeQuery();
+
+            String nome;
+            while (result.next()) {
+                nome = result.getString("Nome");
+
+                String orarioApertura = result.getString("OrarioApertura");
+                String orarioChiusura = result.getString("OrarioChiusura");
+                float costo = result.getFloat("Costo");
+
+                attivita.add(new Attivita(nome, orarioApertura, orarioChiusura,costo, nomeParco));
+            }
+
+            result.close();
+            statement.close();
+        } catch (SQLException e) {
+            l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+        } finally {
+            if(connection != null)
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+                }
+        }
+        return attivita;
     }
 
 }
