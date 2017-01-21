@@ -1,15 +1,12 @@
 package grafica;
 
 
-import entita.Agenzia;
 import entita.Pacchetto;
 import main.DbHelper;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class CreaPacchettiFrame extends JFrame {
     private DbHelper dbh;
@@ -20,6 +17,7 @@ public class CreaPacchettiFrame extends JFrame {
     private JTextField PartitaIVAAgenziaTextField;
 
 
+    /*Da aggiungere una lista di servizi tra cui scegliere*/
     public CreaPacchettiFrame() {
         JPanel content = new JPanel(new BorderLayout());
         content.setBorder(new EmptyBorder(5,5,5,5));
@@ -46,10 +44,12 @@ public class CreaPacchettiFrame extends JFrame {
                     Float.parseFloat(prezzoPacchettoTextField.getText()),
                     PartitaIVAAgenziaTextField.getText());
 
+            /*manca l'arraylist di pacchetti come input di insert pacchetto*/
+
             /*boolean result = dbh.insertPacchetto(p);
 
             if(result)
-                JOptionPane.showMessageDialog(null, "Attivita aggiunta correttamente", "OK", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Pacchetto aggiunto correttamente", "OK", JOptionPane.INFORMATION_MESSAGE);
 */
         });
 
