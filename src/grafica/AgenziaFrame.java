@@ -28,7 +28,7 @@ public class AgenziaFrame extends JFrame {
 
         content.add(buttonPanel, BorderLayout.CENTER);
 
-        creaPacchettiButton.addActionListener(e -> new InfoParchiFrame());
+        creaPacchettiButton.addActionListener(e -> new CreaPacchettiFrame());
 
         vendiPacchettiButton.addActionListener(e -> new VisualizzaPromozioniFrame());
 
