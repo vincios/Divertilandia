@@ -584,22 +584,44 @@ public class DbHelper {
         Connection connection = null;
         try {
             connection = connect();
-            String query = "select p.Codice, p.Nome, p.Prezzo, p.Descrizione " +
-                    "from pacchetto p, agenzia a, acquistare aq " +
-                    "where p.PivaAgenzia = a.PartitaIVA and  a.PartitaIVA = ? and p.Codice = aq.CodicePacchetto";
+            String query = "select p.Codice as CodicePacchetto, p.Nome as NomePacchetto, p.Prezzo, p.Descrizione, s.PartitaIVA, s.Nome as NomeServizio, s.citta, s.via, s.NCivico, s.tipo " +
+                    "from pacchetto p, agenzia a, acquistare aq , includere i, servizio s " +
+                    "where p.PivaAgenzia = a.PartitaIVA and i.CodicePacchetto = p.Codice and s.PartitaIVA = i.PivaServizio and a.PartitaIVA = ? and p.Codice = aq.CodicePacchetto " +
+                    "order by CodicePacchetto, NomeServizio";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, PIVAAgenzia);
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
-                String codice = result.getString("Codice");
-                String nome = result.getString("Nome");
-                String descrizione = result.getString("Descrizione");
-                float prezzo = result.getInt("Prezzo");
+                String codicePacchetto = result.getString("CodicePacchetto");
+                String nomePacchetto = result.getString("NomePacchetto");
+                String descrizionePacchetto = result.getString("Descrizione");
+                float prezzoPacchetto = result.getInt("Prezzo");
 
-                Pacchetto pacchetto = new Pacchetto(codice, nome, descrizione, prezzo, PIVAAgenzia);
-                pacchetti.add(pacchetto);
+                String pIVAServizio = result.getString("PartitaIva");
+                String nomeServizio = result.getString("NomeServizio");
+                String cittaServizio = result.getString("Citta");
+                String viaServizio = result.getString("Via");
+                String numCivicoServizio = result.getString("NCivico");
+                String tipoSerizio = result.getString("Tipo");
+
+                String codicePacchettoPrecedente = null;
+
+                if (!pacchetti.isEmpty()) {
+                    codicePacchettoPrecedente = pacchetti.get(pacchetti.size() -1).getCodice();
+                }
+
+                if (!(pacchetti.isEmpty()) && codicePacchetto.equals(codicePacchettoPrecedente)) {
+                    Pacchetto pacchetto = pacchetti.get(pacchetti.size()-1);
+                    pacchetto.addServizio(new Servizio (pIVAServizio, nomeServizio, cittaServizio, viaServizio,numCivicoServizio, tipoSerizio));
+
+                } else {
+                    Pacchetto pacchetto = new Pacchetto(codicePacchetto, nomePacchetto, descrizionePacchetto, prezzoPacchetto, PIVAAgenzia);
+                    pacchetto.addServizio(new Servizio(pIVAServizio, nomeServizio, cittaServizio, viaServizio, numCivicoServizio, tipoSerizio));
+                    pacchetti.add(pacchetto);
+                }
+
             }
             result.close();
             statement.close();
