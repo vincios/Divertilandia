@@ -31,19 +31,9 @@ public class HomeFrame extends JFrame {
         buttonPanel.add(agenziaButton);
         content.add(buttonPanel, BorderLayout.CENTER);
 
-        gestoreButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new GestoreFrame();
-            }
-        });
+        gestoreButton.addActionListener(e -> new GestoreFrame());
 
-        agenziaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+        agenziaButton.addActionListener(e -> new AgenziaFrame());
 
         setVisible(true);
     }
