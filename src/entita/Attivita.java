@@ -38,9 +38,9 @@ public class Attivita {
 		return costo;
 	}
 
-	public float getPrezzoScontato() {
+	public BigDecimal getPrezzoScontato() {
 		if(offerte.isEmpty())
-			return costo;
+			return BigDecimal.valueOf(costo);
 
 		float prezzoScontato = costo;
 		for(Offerta o : offerte) {
@@ -49,7 +49,7 @@ public class Attivita {
 
 		BigDecimal bd = new BigDecimal(Float.toString(prezzoScontato));
 		bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-		return bd.floatValue();
+		return bd;
 	}
 
 	public String getNomeParco() {

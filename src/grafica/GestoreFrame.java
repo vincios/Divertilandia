@@ -80,6 +80,12 @@ public class GestoreFrame extends JFrame {
             }
         });
 
+        bigliettiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AggiungiBigliettoFrame();
+            }
+        });
         setVisible(true);
     }
 }

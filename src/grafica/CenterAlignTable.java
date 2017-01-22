@@ -8,22 +8,12 @@ import java.awt.*;
 
 public class CenterAlignTable extends JTable {
 
-    public CenterAlignTable() {
-        setAlignment();
+    public CenterAlignTable(){
+        super();
     }
 
     public CenterAlignTable(TableModel dm) {
         super(dm);
-        setAlignment();
-    }
-
-    private void setAlignment(){
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment( SwingConstants.CENTER );
-
-        for(int x=0; x<getColumnCount(); x++){
-            this.getColumnModel().getColumn(x).setCellRenderer( centerRenderer );
-        }
     }
 
     @Override
@@ -38,6 +28,9 @@ public class CenterAlignTable extends JTable {
                 c.setBackground(getBackground());
             }
         }
+
+        if(c instanceof JLabel)
+            ((JLabel) c).setHorizontalAlignment(SwingConstants.CENTER);
         return c;
     }
 }

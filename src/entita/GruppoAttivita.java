@@ -1,15 +1,19 @@
 package entita;
 
+import java.util.ArrayList;
+
 public class GruppoAttivita {
 	private String Nome;
 	private String NomeParco;
-	private String costoPromozionale;
-	
-	public GruppoAttivita(String nome, String nomeParco, String costoPromozionale) {
+	private float costoPromozionale;
+	private ArrayList<Attivita> attivita;
+
+	public GruppoAttivita(String nome, String nomeParco, float costoPromozionale) {
 		super();
 		Nome = nome;
 		NomeParco = nomeParco;
 		this.costoPromozionale = costoPromozionale;
+		this.attivita = new ArrayList<>();
 	}
 	
 	public String getNome() {
@@ -20,7 +24,7 @@ public class GruppoAttivita {
 		return NomeParco;
 	}
 	
-	public String getCostoPromozionale() {
+	public float getCostoPromozionale() {
 		return costoPromozionale;
 	}
 	
@@ -32,11 +36,23 @@ public class GruppoAttivita {
 		NomeParco = nomeParco;
 	}
 	
-	public void setCostoPromozionale(String costoPromozionale) {
+	public void setCostoPromozionale(float costoPromozionale) {
 		this.costoPromozionale = costoPromozionale;
 	}
-	
-	@Override
+
+    public ArrayList<Attivita> getAttivita() {
+        return attivita;
+    }
+
+    public void setAttivita(ArrayList<Attivita> attivita) {
+        this.attivita = attivita;
+    }
+
+    public void addAttivita(Attivita a){
+	    this.attivita.add(a);
+    }
+
+    @Override
 	public String toString() {
 		return Nome + ", " + NomeParco + ", " + costoPromozionale;
 	}

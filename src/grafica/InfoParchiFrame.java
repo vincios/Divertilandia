@@ -35,12 +35,13 @@ public class InfoParchiFrame extends JFrame{
                 Point p = me.getPoint();
                 int row = table.rowAtPoint(p);
                 if (me.getClickCount() == 2) {
-                    ArrayList<Attivita> att = dbh.getAttivitaParco(t.getModel().getValueAt(row, 0).toString());
+                    String parcoSelezionato = t.getModel().getValueAt(row, 0).toString();
+                    ArrayList<Attivita> att = dbh.getAttivitaParco(parcoSelezionato);
                     if (attivitaParcoFrame == null) {
-                        attivitaParcoFrame = new AttivitaParcoFrame(att);
+                        attivitaParcoFrame = new AttivitaParcoFrame(att, parcoSelezionato);
                     } else {
                         attivitaParcoFrame.dispose();
-                        attivitaParcoFrame = new AttivitaParcoFrame(att);
+                        attivitaParcoFrame = new AttivitaParcoFrame(att, parcoSelezionato);
                     }
                 }
             }
@@ -50,6 +51,7 @@ public class InfoParchiFrame extends JFrame{
         setContentPane(content);
 
         setSize(1300,500);
+        setTitle("Visualizzazione Parchi");
         setVisible(true);
     }
 
@@ -108,9 +110,9 @@ class ParchiTableData extends AbstractTableModel{
 
 class AttivitaParcoFrame extends JFrame {
 
-    public AttivitaParcoFrame(ArrayList<Attivita> attivita) {
+    public AttivitaParcoFrame(ArrayList<Attivita> attivita, String nomeParco) {
         JPanel content = new JPanel(new BorderLayout());
-        AttivitaTableModel tm = new AttivitaTableModel(attivita);
+        AttivitaTableModel tm = new AttivitaTableModel(attivita, false);
 
         JTable t = new CenterAlignTable(tm);
 
@@ -125,29 +127,135 @@ class AttivitaParcoFrame extends JFrame {
         setResizable(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+        setTitle("Visualizzazione attivita per " + nomeParco);
         setVisible(true);
     }
+}
 
-    class AttivitaTableModel extends AbstractTableModel {
+class AttivitaTableModel extends AbstractTableModel {
 
-        private ArrayList<Attivita> attivita;
+    private ArrayList<Attivita> attivita;
+    private ArrayList<Boolean> selectedRows;
+    private boolean needCheckBox;
 
-        public AttivitaTableModel(ArrayList<Attivita> attivita) {
-            this.attivita = attivita;
+    public AttivitaTableModel(ArrayList<Attivita> attivita, boolean needCheckBox) {
+        this.attivita = attivita;
+        this.needCheckBox = needCheckBox;
+        this.selectedRows = new ArrayList<>(attivita.size());
+        if(needCheckBox)
+            addChechBox();
+    }
+    public AttivitaTableModel(boolean needCheckBox) {
+        this.attivita = new ArrayList<>();
+        this.needCheckBox = needCheckBox;
+        this.selectedRows = new ArrayList<>(attivita.size());
+        if(needCheckBox)
+            addChechBox();
+    }
+    public void setData(ArrayList<Attivita> attivita){
+        this.attivita = attivita;
+        if(needCheckBox)
+            addChechBox();
+        fireTableDataChanged();
+    }
+
+    public void checkAll(){
+        if(needCheckBox){
+            for (int i = 0; i < attivita.size(); i++) {
+                setValueAt(true, i, 0);
+            }
+        }
+    }
+
+    public void checkNone(){
+        if(needCheckBox){
+            for (int i = 0; i < attivita.size(); i++) {
+                setValueAt(false, i, 0);
+            }
+        }
+    }
+
+    public ArrayList<Attivita> getAttivitaSelezionate(){
+        ArrayList<Attivita> a = new ArrayList<>();
+
+        for(int i = 0; i<selectedRows.size(); i++){
+            if(selectedRows.get(i)){
+                a.add(attivita.get(i));
+            }
         }
 
-        @Override
-        public int getRowCount() {
-            return attivita.size();
+        return a;
+    }
+    private void addChechBox(){
+        if(selectedRows.size() > 0){
+            for(int i = selectedRows.size()-1; i>=0; i--){
+                selectedRows.remove(i);
+            }
+        }
+        for (int i = 0; i < attivita.size(); i++) {
+            selectedRows.add(false);
         }
 
-        @Override
-        public int getColumnCount() {
-            return 4;
-        }
+    }
 
-        @Override
-        public Object getValueAt(int rowIndex, int columnIndex) {
+    @Override
+    public int getRowCount() {
+        return attivita.size();
+    }
+
+    @Override
+    public int getColumnCount() {
+        if(needCheckBox)
+            return 6;
+        return 4;
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        if(needCheckBox)
+            if(columnIndex == 0) return Boolean.class;
+
+        return getValueAt(0, columnIndex).getClass();
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        if(needCheckBox)
+            if(columnIndex == 0)
+                return true;
+
+        return false;
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        if(needCheckBox)
+            if(columnIndex == 0)
+                selectedRows.set(rowIndex, ((boolean) aValue));
+
+        fireTableCellUpdated(rowIndex, columnIndex);
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        if(needCheckBox) {
+            switch (columnIndex) {
+                case 0:
+                    return selectedRows.get(rowIndex);
+                case 1:
+                    return attivita.get(rowIndex).getNome();
+                case 2:
+                    return attivita.get(rowIndex).getOrarioApertura();
+                case 3:
+                    return attivita.get(rowIndex).getOrarioChiusura();
+                case 4:
+                    return attivita.get(rowIndex).getCosto();
+                case 5:
+                    return attivita.get(rowIndex).getPrezzoScontato();
+                default:
+                    return "nd";
+            }
+        }else{
             switch (columnIndex) {
                 case 0:
                     return attivita.get(rowIndex).getNome();
@@ -161,9 +269,27 @@ class AttivitaParcoFrame extends JFrame {
                     return "nd";
             }
         }
+    }
 
-        @Override
-        public String getColumnName(int column) {
+    @Override
+    public String getColumnName(int column) {
+        if(needCheckBox){
+            switch (column) {
+                case 0: return "";
+                case 1:
+                    return "Nome";
+                case 2:
+                    return "Apertura";
+                case 3:
+                    return "Chiusura";
+                case 4:
+                    return "Prezzo originale";
+                case 5:
+                    return "Prezzo (con eventuali sconti)";
+                default:
+                    return "";
+            }
+        }else{
             switch (column) {
                 case 0:
                     return "Nome";

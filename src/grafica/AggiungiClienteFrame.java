@@ -1,7 +1,6 @@
 package grafica;
 
 
-import entita.Agenzia;
 import entita.Cliente;
 import main.DbHelper;
 
@@ -69,7 +68,7 @@ public class AggiungiClienteFrame extends JFrame{
                     JOptionPane.showMessageDialog(null, "Cliente aggiunta correttamente", "OK", JOptionPane.INFORMATION_MESSAGE);
 
                     if(f != null) {
-                        f.aggiornaClientiList();
+                        f.aggiornaClientiTable();
                         dispose();
                     }
                 }
@@ -96,12 +95,12 @@ public class AggiungiClienteFrame extends JFrame{
         JPanel panel = new JPanel(new GridLayout(6, 2, 0,5));
 
         panel.setBorder(new EmptyBorder(0,0,10,0));
-        JLabel pIvaLbl = new JLabel("Codice Fiscale: ");
+        JLabel cfLbl = new JLabel("Codice Fiscale: ");
         JLabel nomeLbl = new JLabel("Nome: ");
-        JLabel telefonoLbl = new JLabel("Cognome: ");
-        JLabel cittaaLbl = new JLabel("Giorno di nascita: ");
-        JLabel viaLbl = new JLabel("Mese di nascita: ");
-        JLabel nCivicoLbl = new JLabel("Anno di nascita: ");
+        JLabel cognomeLbl = new JLabel("Cognome: ");
+        JLabel gNascitaLbl = new JLabel("Giorno di nascita: ");
+        JLabel mNascitaLbl = new JLabel("Mese di nascita: ");
+        JLabel aNascitaLbl = new JLabel("Anno di nascita: ");
 
         cfTextField = new JTextField(20);
         nomeTextField = new JTextField(15);
@@ -111,17 +110,17 @@ public class AggiungiClienteFrame extends JFrame{
         annoTextField = new JTextField(7);
 
 
-        panel.add(pIvaLbl);
+        panel.add(cfLbl);
         panel.add(cfTextField);
         panel.add(nomeLbl);
         panel.add(nomeTextField);
-        panel.add(telefonoLbl);
+        panel.add(cognomeLbl);
         panel.add(cognomeTextField);
-        panel.add(cittaaLbl);
+        panel.add(gNascitaLbl);
         panel.add(giornoTextField);
-        panel.add(viaLbl);
+        panel.add(mNascitaLbl);
         panel.add(meseTextField);
-        panel.add(nCivicoLbl);
+        panel.add(aNascitaLbl);
         panel.add(annoTextField);
 
         return panel;

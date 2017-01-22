@@ -15,6 +15,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Date;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 
 public class VisualizzaPromozioniFrame extends JFrame{
@@ -210,6 +213,7 @@ public class VisualizzaPromozioniFrame extends JFrame{
 
 class OfferteTableData extends AbstractTableModel {
 
+    private SimpleDateFormat dateFormatter;
     ArrayList<Offerta> offerte;
 
     public OfferteTableData(ArrayList<Offerta> offerte) {
@@ -217,6 +221,7 @@ class OfferteTableData extends AbstractTableModel {
     }
     public OfferteTableData() {
         this.offerte = new ArrayList<>();
+        this.dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
     }
 
     public void addOfferte(ArrayList<Offerta> offerte){
@@ -243,7 +248,7 @@ class OfferteTableData extends AbstractTableModel {
             case 0: return offerte.get(rowIndex).getCodice();
             case 1: return offerte.get(rowIndex).getNome();
             case 2: return offerte.get(rowIndex).getDescrizione();
-            case 3: return offerte.get(rowIndex).getDataInizio() + " - " + offerte.get(rowIndex).getDataFine();
+            case 3: return dateFormatter.format(offerte.get(rowIndex).getDataInizio()) + " - " + dateFormatter.format(offerte.get(rowIndex).getDataFine());
             case 4: return offerte.get(rowIndex).getPercentualeSconto();
             case 5: return offerte.get(rowIndex).getNomeAttivita() + ", " + offerte.get(rowIndex).getNomeParco();
             default: return "nd";
