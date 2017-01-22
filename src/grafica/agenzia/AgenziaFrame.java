@@ -1,4 +1,7 @@
-package grafica;
+package grafica.agenzia;
+
+import entita.Agenzia;
+import grafica.VisualizzaPacchettiVendutiFrame;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -6,11 +9,16 @@ import java.awt.*;
 
 public class AgenziaFrame extends JFrame {
 
-    public AgenziaFrame() throws HeadlessException {
+    private Agenzia agenziaSelezionata;
+    public AgenziaFrame(Agenzia agenziaSelezionata) {
         setTitle("Agenzia");
-        setSize(250,180);
+
+        this.agenziaSelezionata = agenziaSelezionata;
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JLabel agenziaLabel = new JLabel("Agenzia:");
+        JLabel selezioneLabel = new JLabel(agenziaSelezionata.getNome());
 
         JPanel content = new JPanel(new BorderLayout());
         content.setBorder(new EmptyBorder(10,5,10,5));
@@ -26,14 +34,20 @@ public class AgenziaFrame extends JFrame {
         buttonPanel.add(vendiPacchettiButton);
         buttonPanel.add(visualizzaPacchettiButton);
 
-        content.add(buttonPanel, BorderLayout.CENTER);
+        JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        northPanel.add(agenziaLabel);
+        northPanel.add(selezioneLabel);
 
-        creaPacchettiButton.addActionListener(e -> new CreaPacchettiFrame());
+        content.add(buttonPanel, BorderLayout.CENTER);
+        content.add(northPanel, BorderLayout.NORTH);
+
+        creaPacchettiButton.addActionListener(e -> new CreaPacchettiFrame(agenziaSelezionata));
 
         //vendiPacchettiButton.addActionListener(e -> new VisualizzaPromozioniFrame());
 
         visualizzaPacchettiButton.addActionListener(e -> new VisualizzaPacchettiVendutiFrame());
 
+       setSize(250,200);
         setVisible(true);
     }
 }

@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import entita.*;
 
 public class DbHelper {
@@ -506,7 +507,7 @@ public class DbHelper {
     }
 
     /* 9 Inserisce un nuovo pacchetto*/
-    public void insertPacchetto(Pacchetto p, ArrayList<String> pIVAServizio) {
+    public boolean insertPacchetto(Pacchetto p, ArrayList<String> pIVAServizio) throws SQLException {
         Connection connection = null;
 
         try {
@@ -538,7 +539,11 @@ public class DbHelper {
             statementPacchetto.close();
             statementServizio.close();
         } catch (SQLException e) {
+            if(e instanceof MySQLIntegrityConstraintViolationException )
+                throw e;
+
             l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+            return false;
         } finally {
             if(connection != null)
                 try {
@@ -547,6 +552,9 @@ public class DbHelper {
                     l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
                 }
         }
+
+        return true;
+        //TODO: sistemare il check del risultato
     }
 
     /* 10 Vende un pacchetto*/
@@ -584,7 +592,7 @@ public class DbHelper {
         Connection connection = null;
         try {
             connection = connect();
-            String query = "select p.Codice as CodicePacchetto, p.Nome as NomePacchetto, p.Prezzo, p.Descrizione, s.PartitaIVA, s.Nome as NomeServizio, s.citta, s.via, s.NCivico, s.tipo " +
+            String query = "select p.Codice as CodicePacchetto, p.Nome as NomePacchetto, p.Prezzo, p.Descrizione, s.PartitaIVA, s.Nome as NomeServizio, s.citta, s.via, s.NCivico, s.tipo, aq.CFCliente " +
                     "from pacchetto p, agenzia a, acquistare aq , includere i, servizio s " +
                     "where p.PivaAgenzia = a.PartitaIVA and i.CodicePacchetto = p.Codice and s.PartitaIVA = i.PivaServizio and a.PartitaIVA = ? and p.Codice = aq.CodicePacchetto " +
                     "order by CodicePacchetto, NomeServizio";
@@ -893,4 +901,84 @@ public class DbHelper {
         return new ArrayList<>(gruppi.values());
     }
 
+    public ArrayList<Agenzia> getAgenzie(){
+        ArrayList<Agenzia> agenzie = new ArrayList<>();
+        Connection connection = null;
+        try {
+            connection = connect();
+            String query =  "select * " +
+                    "from Agenzia " +
+                    "order by Nome";
+
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+
+            while (result.next()) {
+                String partitaIVA = result.getString("PartitaIVA");
+                String nome = result.getString("Nome");
+                String citta = result.getString("Citta");
+                String via = result.getString("Via");
+                String nCivico = result.getString("NCivico");
+                String telefono = result.getString("Telefono");
+
+                Agenzia a = new Agenzia(partitaIVA, nome, telefono, citta, via, nCivico);
+                agenzie.add(a);
+            }
+
+            result.close();
+            statement.close();
+        } catch (SQLException e) {
+            l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+        } finally {
+            if(connection != null)
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+                }
+        }
+        return agenzie;
+    }
+
+    public ArrayList<Servizio> getServiziByTipo(String tipo){
+        ArrayList<Servizio> servizi = new ArrayList<>();
+        Connection connection = null;
+        try {
+            connection = connect();
+            String query =  "select * " +
+                    "from servizio " +
+                    "where tipo = ? " +
+                    "order by Nome";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, tipo);
+            ResultSet result = preparedStatement.executeQuery();
+
+            while (result.next()) {
+
+                String partitaIVA = result.getString("PartitaIVA");
+                String nome = result.getString("Nome");
+                String citta = result.getString("Citta");
+                String via = result.getString("Via");
+                String nCivico = result.getString("NCivico");
+                String tipo1 = result.getString("tipo");
+
+                Servizio s = new Servizio(partitaIVA, nome, citta, via, nCivico, tipo);
+                servizi.add(s);
+            }
+
+            result.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+        } finally {
+            if(connection != null)
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+                }
+        }
+        return servizi;
+    }
 }

@@ -1,11 +1,11 @@
 package grafica;
 
+import grafica.agenzia.AgenziaFrame;
+import grafica.agenzia.SelezioneAgenziaFrame;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class HomeFrame extends JFrame {
 
@@ -33,7 +33,7 @@ public class HomeFrame extends JFrame {
 
         gestoreButton.addActionListener(e -> new GestoreFrame());
 
-        agenziaButton.addActionListener(e -> new AgenziaFrame());
+        agenziaButton.addActionListener(e -> new SelezioneAgenziaFrame());
 
         setVisible(true);
     }

@@ -125,7 +125,7 @@ public class MainClass {
 		s.add("LLTM");
 		s.add("PNPR");
 		s.add("CBPR");
-		dh.insertPacchetto(p, s);
+		//dh.insertPacchetto(p, s);
 
 		Pacchetto p1 = new Pacchetto(Long.toString(System.currentTimeMillis()), "Pacchetto di prova 2", "Ciaooooo2",122, "LGRG");
 		ArrayList<String> s1 = new ArrayList<>();
@@ -133,7 +133,7 @@ public class MainClass {
 		s1.add("MRMN");
 		s1.add("GDZL");
 		s1.add("LCVD");
-		dh.insertPacchetto(p1, s1);
+		//dh.insertPacchetto(p1, s1);
 
 		Pacchetto p2 = new Pacchetto(Long.toString(System.currentTimeMillis()), "Pacchetto di prova 3", "Ciaooooo3",120, "GNZS");
 		ArrayList<String> s2 = new ArrayList<>();
@@ -141,7 +141,7 @@ public class MainClass {
 		s2.add("KMHT");
 		s2.add("CPSL");
 		s2.add("VDDR");
-		dh.insertPacchetto(p2, s2);
+		//dh.insertPacchetto(p2, s2);
 
 		Pacchetto p3 = new Pacchetto(Long.toString(System.currentTimeMillis()), "Pacche35tto d345435i prova4", "Ciaooooo",120, "CNTR");
 		ArrayList<String> s3 = new ArrayList<>();
@@ -149,7 +149,7 @@ public class MainClass {
 		s3.add("MRMN");
 		s3.add("PNPR");
 		s3.add("LLTC");
-		dh.insertPacchetto(p3, s3);
+		//dh.insertPacchetto(p3, s3);
 
 		Pacchetto p4 = new Pacchetto(Long.toString(System.currentTimeMillis()), "P64356acchet463to 645356di prova", "Ci463545aooooo",120, "DVNS");
 		ArrayList<String> s4 = new ArrayList<>();
@@ -157,7 +157,7 @@ public class MainClass {
 		s4.add("PNPR");
 		s4.add("LLLL");
 		s4.add("NLPC");
-		dh.insertPacchetto(p4, s4);
+		//dh.insertPacchetto(p4, s4);
 
 	}
 }
