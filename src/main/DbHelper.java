@@ -380,7 +380,7 @@ public class DbHelper {
         }
 
         int somma = 0;
-        for (int i = 0; i == resultAttivita.length; i++) {
+        for (int i = 0; i < resultAttivita.length; i++) {
             somma = somma + resultAttivita[i];
         }
         return resultBiglietto == 1 && resultParco == 1 && somma == resultAttivita.length;
@@ -841,6 +841,56 @@ public class DbHelper {
                 }
         }
         return attivita;
+    }
+
+    /*Ritorna l'elenco dei gruppi attivita di un parco compreso, per ciscuno di esso, l'elenco delle attivita che comprende */
+    public ArrayList<GruppoAttivita> getGruppiAttivita(String nomeParco){
+        Connection connection = null;
+        Map<String, GruppoAttivita> gruppi = new HashMap<>();
+        try {
+            connection = connect();
+            String query = "select g.NomeParco as NomeGruppo, g.NomeParco as NomeParco, g.CostoPromozionale, a.Nome as NomeAttivita, a.OrarioApertura, a.OrarioChiusura " +
+                    "from gruppoattivita g, contenere c, attivita a " +
+                    "where g.NomeParco = ? and g.Nome = c.NomeGruppo and g.NomeParco = c.NomeParco and c.NomeParco = a.NomeParco and c.NomeAttivita = a.Nome ";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, nomeParco);
+
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()){
+                String nomeGruppo = result.getString("NomeGruppo");
+                String nomePa = result.getString("NomeParco");
+                float costoPromozionale = result.getFloat("CostoPromozionale");
+                String nomeAttivita = result.getString("NomeAttivita");
+                String orarioApertura = result.getString("OrarioApertura");
+                String orarioChiusura = result.getString("OrarioChiusura");
+
+                Attivita a = new Attivita(nomeAttivita, orarioApertura, orarioChiusura, 0.0f, nomeParco);
+
+                if(gruppi.containsKey(nomeGruppo)){
+                    gruppi.get(nomeGruppo).addAttivita(a);
+                }else{
+                    GruppoAttivita g = new GruppoAttivita(nomeGruppo, nomeParco, costoPromozionale);
+                    g.addAttivita(a);
+                    gruppi.put(g.getNome(), g);
+                }
+            }
+            result.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
+        } finally {
+            if(connection != null)
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    l.log(Level.SEVERE, "Errore nella chiusura di connessione", e);
+                }
+        }
+
+        return new ArrayList<>(gruppi.values());
     }
 
 }

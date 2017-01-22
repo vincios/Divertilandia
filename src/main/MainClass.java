@@ -79,7 +79,7 @@ public class MainClass {
 		//dh.insertPacchetto(p, servizi);
 
 
-		System.out.println("");
+		System.out.println("getAttivitaConOfferteAttiveDiUnParco");
 		ArrayList<Attivita> arr = dh.getAttivitaConOfferteAttiveDiUnParco("SuperHero Park", Date.valueOf("2017-01-25"));
 		ArrayList<String> att = new ArrayList<>();
 
@@ -89,7 +89,7 @@ public class MainClass {
 			for(Offerta o : a.getOfferte()) {
 				System.out.println("\t" + o);
 			}
-			prezzoBiglietto = prezzoBiglietto + a.getPrezzoScontato();
+			prezzoBiglietto = prezzoBiglietto + a.getPrezzoScontato().floatValue();
 			System.out.println();
 			att.add(a.getNome());
 		}
