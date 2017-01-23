@@ -84,6 +84,7 @@ public class AggiungiBigliettoFrame extends JFrame implements TableModelListener
         aggiornaClientiTable();
 
         JTable tClienti = new CenterAlignTable(ctd);
+        tClienti.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane csp = new JScrollPane(tClienti);
 
         JButton bNext = new JButton("Avanti");
@@ -91,27 +92,19 @@ public class AggiungiBigliettoFrame extends JFrame implements TableModelListener
 
         tClienti.setRowHeight(30);
 
-        bNext.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(tClienti.getSelectedRow() != -1) {
-                    clienteSelezionato = clienti.get(tClienti.getSelectedRow());
-                    swapToPage(SELEZIONE_PARCO);
-                }else{
-                    JOptionPane.showMessageDialog(null, "Nessun cliente selezionato", "ERRORE", JOptionPane.WARNING_MESSAGE);
-                }
+        bNext.addActionListener(e -> {
+            if(tClienti.getSelectedRow() != -1) {
+                clienteSelezionato = clienti.get(tClienti.getSelectedRow());
+                swapToPage(SELEZIONE_PARCO);
+            }else{
+                JOptionPane.showMessageDialog(null, "Nessun cliente selezionato", "ERRORE", JOptionPane.WARNING_MESSAGE);
             }
         });
 
 
         AggiungiClienteFrame fr = new AggiungiClienteFrame(this);
 
-        bNew.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                fr.setVisible(true);
-            }
-        });
+        bNew.addActionListener(e -> fr.setVisible(true));
 
         panelNorth.add(l);
         panelCenter.add(csp, BorderLayout.CENTER);
@@ -154,7 +147,9 @@ public class AggiungiBigliettoFrame extends JFrame implements TableModelListener
         ArrayList<ParcoDivertimenti> parchi = dbh.getInfoParchiDivertimento();
         ParchiTableData pdm = new ParchiTableData(parchi);
         JTable parchiTable = new CenterAlignTable(pdm);
-        parchiTable.setRowHeight(30  );
+
+        parchiTable.setRowHeight(30);
+        parchiTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane psp = new JScrollPane(parchiTable);
 
@@ -256,59 +251,45 @@ public class AggiungiBigliettoFrame extends JFrame implements TableModelListener
         reloadAttivita(FROM_DB);
         reloadGruppiAttivita();
 
-        prevBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                swapToPage(SELEZIONE_PARCO);
+        prevBtn.addActionListener(e -> swapToPage(SELEZIONE_PARCO));
+
+        nextBtn.addActionListener(e -> {
+            Biglietto b = new Biglietto(
+                    ""+System.currentTimeMillis(),
+                    prezzoTotale.floatValue(),
+                    new Date(System.currentTimeMillis()),
+                    parcoSelezionato.getNome(),
+                    clienteSelezionato.getCodiceFiscale());
+
+            ArrayList<String> att = new ArrayList<>();
+            if(atm.getAttivitaSelezionate().size() == 0){
+                JOptionPane.showMessageDialog(null, "Nessuna attivita selezionata", "ERRORE", JOptionPane.WARNING_MESSAGE);
+                return;
             }
+            for(Attivita a : atm.getAttivitaSelezionate()){
+                att.add(a.getNome());
+            }
+
+            boolean eseguito = dbh.insertBiglietto(b,att);
+            if(eseguito) {
+                JOptionPane.showMessageDialog(null, "Biglietto aggiunto correttamente", "OK", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+            }else
+                JOptionPane.showMessageDialog(null, "Impossibile aggiungere biglietto", "ERRORE", JOptionPane.ERROR_MESSAGE);
         });
 
-        nextBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Biglietto b = new Biglietto(
-                        ""+System.currentTimeMillis(),
-                        prezzoTotale.floatValue(),
-                        new Date(System.currentTimeMillis()),
-                        parcoSelezionato.getNome(),
-                        clienteSelezionato.getCodiceFiscale());
-
-                ArrayList<String> att = new ArrayList<>();
-                if(atm.getAttivitaSelezionate().size() == 0){
-                    JOptionPane.showMessageDialog(null, "Nessuna attivita selezionata", "ERRORE", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-                for(Attivita a : atm.getAttivitaSelezionate()){
-                    att.add(a.getNome());
-                }
-
-                boolean eseguito = dbh.insertBiglietto(b,att);
-                if(eseguito) {
-                    JOptionPane.showMessageDialog(null, "Biglietto aggiunto correttamente", "OK", JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
-                }else
-                    JOptionPane.showMessageDialog(null, "Impossibile aggiungere biglietto", "ERRORE", JOptionPane.ERROR_MESSAGE);
-            }
+        annullaSelezioneButton.addActionListener(e -> {
+            gruppiAttivitaJList.clearSelection();
+            reloadAttivita(FROM_ATTIVITA_PARCO);
         });
 
-        annullaSelezioneButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gruppiAttivitaJList.clearSelection();
-                reloadAttivita(FROM_ATTIVITA_PARCO);
-            }
-        });
-
-        gruppiAttivitaJList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if(gruppoAttivitaDefaultListModel.size() > 0) {
-                    GruppoAttivita gruppoAttivita = gruppoAttivitaDefaultListModel.getElementAt(e.getFirstIndex());
-                    attivitaGruppo = gruppoAttivita.getAttivita();
-                    reloadAttivita(FROM_GRUPPO);
-                    prezzoTotale = new BigDecimal(gruppoAttivita.getCostoPromozionale());
-                    prezzoTotaleField.setText("" + prezzoTotale);
-                }
+        gruppiAttivitaJList.addListSelectionListener(e -> {
+            if(gruppoAttivitaDefaultListModel.size() > 0) {
+                GruppoAttivita gruppoAttivita = gruppoAttivitaDefaultListModel.getElementAt(e.getFirstIndex());
+                attivitaGruppo = gruppoAttivita.getAttivita();
+                reloadAttivita(FROM_GRUPPO);
+                prezzoTotale = new BigDecimal(gruppoAttivita.getCostoPromozionale());
+                prezzoTotaleField.setText("" + prezzoTotale);
             }
         });
 
