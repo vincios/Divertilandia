@@ -541,9 +541,11 @@ public class DbHelper {
             connection.setAutoCommit(true);
             statementPacchetto.close();
             statementServizio.close();
-        } catch (SQLException e) {
-            if(e instanceof MySQLIntegrityConstraintViolationException )
-                throw e;
+        } catch (MySQLIntegrityConstraintViolationException e){
+            throw e;
+        }
+        catch (SQLException e) {
+
 
             l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
             return false;

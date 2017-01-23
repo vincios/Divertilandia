@@ -1,8 +1,10 @@
-package grafica;
+package grafica.agenzia;
 
 
+import entita.Agenzia;
 import entita.Pacchetto;
 import entita.Servizio;
+import grafica.CenterAlignTable;
 import main.DbHelper;
 
 import javax.swing.*;
@@ -14,18 +16,23 @@ import java.awt.*;
 import java.util.ArrayList;
 
 
-/*Funziona, bisogna aggiungere o un input text in cui inserire la parita iva dell'agenzia, oppure
-    mettere la lista di agenzie tra cui scegliere, per ora l'ho messa fissa "GNZS".
-
-    Ho modificato la Query 11 adesso il click su uno dei pacchetti fa visualizzare i servizi inclusi in tale pacchetto*/
-
 public class VisualizzaPacchettiVendutiFrame extends JFrame{
 
-    public VisualizzaPacchettiVendutiFrame() {
+    private Agenzia agenziaSelezionata;
+    private float incassoTotale;
+
+    public VisualizzaPacchettiVendutiFrame(Agenzia agenziaSelezionata) {
+        this.agenziaSelezionata = agenziaSelezionata;
+        this.incassoTotale = 0;
         DbHelper dbh = new DbHelper();
-        ArrayList<Pacchetto> pacchetti = dbh.getPacchettiVendutiDaAgenzia("GNZS");
+        ArrayList<Pacchetto> pacchetti = dbh.getPacchettiVendutiDaAgenzia(agenziaSelezionata.getPartitaIva());
 
+        for (Pacchetto p : pacchetti) {
+            incassoTotale += p.getPrezzo();
+        }
 
+        Pacchetto incassoTotale = new Pacchetto("Incasso totale", "", "", this.incassoTotale,"");
+        pacchetti.add(incassoTotale);
         JPanel content = new JPanel(new BorderLayout());
         PacchettiTableDataNoAgenzie td = new PacchettiTableDataNoAgenzie(pacchetti);
 
@@ -55,6 +62,7 @@ public class VisualizzaPacchettiVendutiFrame extends JFrame{
             }
         });
 
+        content.add(createNorthPanel(), BorderLayout.NORTH);
         southPanel.add(jList, BorderLayout.CENTER);
         content.add(southPanel, BorderLayout.SOUTH);
         setContentPane(content);
@@ -62,6 +70,19 @@ public class VisualizzaPacchettiVendutiFrame extends JFrame{
         setSize(1200,450);
         setVisible(true);
     }
+
+    private JPanel createNorthPanel(){
+        JPanel panel = new JPanel(new FlowLayout());
+
+        JLabel agenziaLabel = new JLabel("Pacchetti venduti dall'agenzia:");
+        JLabel agenziaSelezionataLabel = new JLabel(agenziaSelezionata.getNome());
+
+        panel.add(agenziaLabel);
+        panel.add(agenziaSelezionataLabel);
+
+        return panel;
+    }
+
 }
 
 class PacchettiTableDataNoAgenzie extends AbstractTableModel {
@@ -79,7 +100,7 @@ class PacchettiTableDataNoAgenzie extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 5;
+        return 4;
     }
 
     @Override
@@ -89,7 +110,6 @@ class PacchettiTableDataNoAgenzie extends AbstractTableModel {
             case 1: return pacchetti.get(rowIndex).getNome();
             case 2: return pacchetti.get(rowIndex).getDescrizione();
             case 3: return pacchetti.get(rowIndex).getPrezzo();
-            case 4: return pacchetti.get(rowIndex).getpIvaAgenzia();
             default: return "nd";
         }
     }
@@ -101,7 +121,6 @@ class PacchettiTableDataNoAgenzie extends AbstractTableModel {
             case 1: return "Nome";
             case 2: return "Descrizione";
             case 3: return "Prezzo";
-            case 4: return "Agenzia";
             default: return "";
         }
     }

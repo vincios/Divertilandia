@@ -186,6 +186,7 @@ class AttivitaTableModel extends AbstractTableModel {
 
         return a;
     }
+
     private void addChechBox(){
         if(selectedRows.size() > 0){
             for(int i = selectedRows.size()-1; i>=0; i--){

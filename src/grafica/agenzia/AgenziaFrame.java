@@ -1,7 +1,6 @@
 package grafica.agenzia;
 
 import entita.Agenzia;
-import grafica.VisualizzaPacchettiVendutiFrame;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -45,7 +44,7 @@ public class AgenziaFrame extends JFrame {
 
         vendiPacchettiButton.addActionListener(e -> new VendiPacchettiFrame(agenziaSelezionata));
 
-        visualizzaPacchettiButton.addActionListener(e -> new VisualizzaPacchettiVendutiFrame());
+        visualizzaPacchettiButton.addActionListener(e -> new VisualizzaPacchettiVendutiFrame(agenziaSelezionata));
 
        setSize(250,200);
         setVisible(true);

@@ -73,7 +73,7 @@ public class CreaPacchettiFrame extends JFrame {
                     agenziaSelezionata.getPartitaIva());
 
 
-            boolean result = false;
+            boolean result;
             try {
                 result = dbh.insertPacchetto(p, servizi);
             } catch (SQLException e1) {
