@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.sql.SQLException;
 
 public class AggiungiClienteFrame extends JFrame{
     private DbHelper dbh;
@@ -62,10 +63,16 @@ public class AggiungiClienteFrame extends JFrame{
                         cognomeTextField.getText(),
                         ddn);
 
-                boolean result = dbh.insertCliente(a);
+                boolean result = false;
+                try {
+                    result = dbh.insertCliente(a);
+                } catch (SQLException e1) {
+                    JOptionPane.showMessageDialog(null, "Esiste gia un cliente con tale codice fiscale", "Errore", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
                 if(result) {
-                    JOptionPane.showMessageDialog(null, "Cliente aggiunta correttamente", "OK", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Cliente aggiunto correttamente", "OK", JOptionPane.INFORMATION_MESSAGE);
 
                     if(f != null) {
                         f.aggiornaClientiTable();

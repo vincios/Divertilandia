@@ -192,7 +192,7 @@ public class DbHelper {
                     "select pa.Codice " +
                     "from pacchetto pa, acquistare ac " +
                     "where ac.CodicePacchetto = pa.Codice) " +
-                    "order by a.PartitaIVA, p.Codice, s.nome;";
+                    "order by a.PartitaIVA, p.Codice, s.nome";
 
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(query);
@@ -746,7 +746,7 @@ public class DbHelper {
     }
 
     /*Inserisce un nuovo clente*/
-    public boolean insertCliente(Cliente c) {
+    public boolean insertCliente(Cliente c) throws SQLException {
         Connection connection = null;
         int result;
         try {
@@ -762,6 +762,8 @@ public class DbHelper {
 
             statement.close();
         } catch (SQLException e) {
+            if(e instanceof MySQLIntegrityConstraintViolationException )
+                throw e;
             l.log(Level.SEVERE, "Errore di connessione al DataBase\n" + e.getMessage(), e);
             return false;
         } finally {

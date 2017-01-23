@@ -1,7 +1,6 @@
 package grafica;
 
 
-import entita.Agenzia;
 import entita.Pacchetto;
 import entita.Servizio;
 import main.DbHelper;

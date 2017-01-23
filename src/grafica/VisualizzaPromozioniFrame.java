@@ -16,8 +16,6 @@ import java.awt.event.ItemListener;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 
 public class VisualizzaPromozioniFrame extends JFrame{
