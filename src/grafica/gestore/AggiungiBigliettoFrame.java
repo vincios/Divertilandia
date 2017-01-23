@@ -288,7 +288,7 @@ public class AggiungiBigliettoFrame extends JFrame implements TableModelListener
 
         gruppiAttivitaJList.addListSelectionListener(e -> {
             if(gruppoAttivitaDefaultListModel.size() > 0) {
-                GruppoAttivita gruppoAttivita = gruppoAttivitaDefaultListModel.getElementAt(e.getFirstIndex());
+                GruppoAttivita gruppoAttivita = gruppoAttivitaDefaultListModel.getElementAt(gruppiAttivitaJList.getSelectedIndex());
                 attivitaGruppo = gruppoAttivita.getAttivita();
                 reloadAttivita(FROM_GRUPPO);
                 prezzoTotale = new BigDecimal(gruppoAttivita.getCostoPromozionale());
