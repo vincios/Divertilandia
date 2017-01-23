@@ -2,6 +2,7 @@ package grafica;
 
 
 import entita.Cliente;
+import grafica.gestore.AggiungiBigliettoFrame;
 import main.DbHelper;
 
 import javax.swing.*;

@@ -1,9 +1,10 @@
-package grafica;
+package grafica.gestore;
 
 
 import entita.Agenzia;
 import entita.Pacchetto;
 import entita.Servizio;
+import grafica.CenterAlignTable;
 import main.DbHelper;
 
 import javax.swing.*;

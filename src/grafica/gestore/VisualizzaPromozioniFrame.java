@@ -1,7 +1,8 @@
-package grafica;
+package grafica.gestore;
 
 import entita.Offerta;
 import entita.ParcoDivertimenti;
+import grafica.CenterAlignTable;
 import main.DbHelper;
 
 import javax.swing.*;

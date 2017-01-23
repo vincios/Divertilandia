@@ -1,5 +1,6 @@
 package grafica;
 
+import grafica.gestore.GestoreFrame;
 import grafica.agenzia.SelezioneAgenziaFrame;
 
 import javax.swing.*;
@@ -22,7 +23,7 @@ public class HomeFrame extends JFrame {
         JLabel titolo = new JLabel("Entra come:", SwingConstants.HORIZONTAL);
         content.add(titolo, BorderLayout.NORTH);
 
-        JButton gestoreButton = new JButton("Gestore");
+        JButton gestoreButton = new JButton("gestore");
         JButton agenziaButton = new JButton("Agenzia");
 
         JPanel buttonPanel = new JPanel(new FlowLayout());

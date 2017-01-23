@@ -1,4 +1,4 @@
-package grafica;
+package grafica.gestore;
 
 import entita.Agenzia;
 import main.DbHelper;

@@ -1,4 +1,4 @@
-package grafica;
+package grafica.gestore;
 
 import entita.Attivita;
 import entita.ParcoDivertimenti;
@@ -21,13 +21,8 @@ public class AggiungiAttivitaFrame extends JFrame{
     private JTextField costoTextField;
 
 
-    public AggiungiAttivitaFrame() throws HeadlessException {
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                System.out.println(e.getComponent().getWidth() +"x"+e.getComponent().getHeight());
-            }
-        });
+    public AggiungiAttivitaFrame(){
+
         JPanel content = new JPanel(new BorderLayout());
         content.setBorder(new EmptyBorder(5,5,5,5));
         dbh = new DbHelper();

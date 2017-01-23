@@ -1,6 +1,9 @@
-package grafica;
+package grafica.gestore;
 
 import entita.*;
+import grafica.AggiungiClienteFrame;
+import grafica.AttivitaTableModel;
+import grafica.CenterAlignTable;
 import main.DbHelper;
 
 import javax.swing.*;
@@ -122,7 +125,7 @@ public class AggiungiBigliettoFrame extends JFrame implements TableModelListener
         return primaPagina;
     }
 
-    protected void aggiornaClientiTable() {
+    public void aggiornaClientiTable() {
         clienti = dbh.getClienti();
         if(ctd == null)
             ctd = new ClientiTableData(clienti);

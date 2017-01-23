@@ -1,4 +1,4 @@
-package grafica;
+package grafica.gestore;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 public class GestoreFrame extends JFrame {
 
     public GestoreFrame() throws HeadlessException {
-        setTitle("Gestore");
+        setTitle("gestore");
         setSize(250,400);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
