@@ -869,7 +869,7 @@ public class DbHelper {
         Map<String, GruppoAttivita> gruppi = new HashMap<>();
         try {
             connection = connect();
-            String query = "select g.NomeParco as NomeGruppo, g.NomeParco as NomeParco, g.CostoPromozionale, a.Nome as NomeAttivita, a.OrarioApertura, a.OrarioChiusura " +
+            String query = "select g.Nome as NomeGruppo, g.NomeParco as NomeParco, g.CostoPromozionale, a.Nome as NomeAttivita, a.OrarioApertura, a.OrarioChiusura " +
                     "from gruppoattivita g, contenere c, attivita a " +
                     "where g.NomeParco = ? and g.Nome = c.NomeGruppo and g.NomeParco = c.NomeParco and c.NomeParco = a.NomeParco and c.NomeAttivita = a.Nome ";
 
@@ -880,7 +880,6 @@ public class DbHelper {
 
             while (result.next()){
                 String nomeGruppo = result.getString("NomeGruppo");
-                String nomePa = result.getString("NomeParco");
                 float costoPromozionale = result.getFloat("CostoPromozionale");
                 String nomeAttivita = result.getString("NomeAttivita");
                 String orarioApertura = result.getString("OrarioApertura");
@@ -973,7 +972,6 @@ public class DbHelper {
                 String citta = result.getString("Citta");
                 String via = result.getString("Via");
                 String nCivico = result.getString("NCivico");
-                String tipo1 = result.getString("tipo");
 
                 Servizio s = new Servizio(partitaIVA, nome, citta, via, nCivico, tipo);
                 servizi.add(s);
