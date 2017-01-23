@@ -381,8 +381,8 @@ public class DbHelper {
         }
 
         int somma = 0;
-        for (int i = 0; i < resultAttivita.length; i++) {
-            somma = somma + resultAttivita[i];
+        for (int aResultAttivita : resultAttivita) {
+            somma = somma + aResultAttivita;
         }
         return resultBiglietto == 1 && resultParco == 1 && somma == resultAttivita.length;
     }
@@ -509,6 +509,9 @@ public class DbHelper {
     /* 9 Inserisce un nuovo pacchetto*/
     public boolean insertPacchetto(Pacchetto p, ArrayList<String> pIVAServizio) throws SQLException {
         Connection connection = null;
+        int resultPacchetto;
+        int[] resultServizi;
+
 
         try {
             connection = connect();
@@ -521,10 +524,10 @@ public class DbHelper {
             statementPacchetto.setString(3, p.getDescrizione());
             statementPacchetto.setFloat(4, p.getPrezzo());
             statementPacchetto.setString(5, p.getpIvaAgenzia());
-            statementPacchetto.executeUpdate();
+            resultPacchetto = statementPacchetto.executeUpdate();
 
-            String queryHotel = "insert into includere values(?, ?);";
-            PreparedStatement statementServizio = connection.prepareStatement(queryHotel);
+            String queryServizio = "insert into includere values(?, ?);";
+            PreparedStatement statementServizio = connection.prepareStatement(queryServizio);
 
             for(String hh: pIVAServizio) {
                 statementServizio.setString(1, p.getCodice());
@@ -532,7 +535,7 @@ public class DbHelper {
                 statementServizio.addBatch();
             }
 
-            statementServizio.executeBatch();
+            resultServizi = statementServizio.executeBatch();
 
             connection.commit();
             connection.setAutoCommit(true);
@@ -553,8 +556,13 @@ public class DbHelper {
                 }
         }
 
-        return true;
-        //TODO: sistemare il check del risultato
+        int somma = 0;
+
+        for (int i : resultServizi) {
+            somma = somma + i;
+        }
+
+        return resultPacchetto == 1 && somma == resultServizi.length;
     }
 
     /* 10 Vende un pacchetto*/
