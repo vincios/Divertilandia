@@ -43,7 +43,7 @@ public class AgenziaFrame extends JFrame {
 
         creaPacchettiButton.addActionListener(e -> new CreaPacchettiFrame(agenziaSelezionata));
 
-        //vendiPacchettiButton.addActionListener(e -> new VisualizzaPromozioniFrame());
+        vendiPacchettiButton.addActionListener(e -> new VendiPacchettiFrame(agenziaSelezionata));
 
         visualizzaPacchettiButton.addActionListener(e -> new VisualizzaPacchettiVendutiFrame());
 
