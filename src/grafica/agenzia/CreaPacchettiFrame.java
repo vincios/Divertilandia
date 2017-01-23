@@ -4,14 +4,11 @@ package grafica.agenzia;
 import entita.Agenzia;
 import entita.Pacchetto;
 import entita.Servizio;
-import grafica.AgenzieListCellRenderer;
 import main.DbHelper;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -31,14 +28,6 @@ public class CreaPacchettiFrame extends JFrame {
     private Agenzia agenziaSelezionata;
 
     public CreaPacchettiFrame(Agenzia selezione) {
-
-
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                System.out.println(e.getComponent().getWidth() +"x"+e.getComponent().getHeight());
-            }
-        });
         this.agenziaSelezionata = selezione;
 
         JPanel content = new JPanel(new BorderLayout());
